@@ -1,6 +1,6 @@
 {
   "name": "react-native-sortable-listview",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Drag drop capable wrapper of ListView for React Native",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,9 @@
     "url": "git+https://github.com/deanmcpherson/react-native-sortable-listview.git"
   },
   "keywords": [
+    "react-component",
+    "ios",
+    "android",
     "react-native",
     "drag",
     "drop",
