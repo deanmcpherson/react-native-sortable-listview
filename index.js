@@ -36,9 +36,9 @@ var Row = React.createClass({
     let activeIndex = activeData ? Number(activeData.rowData.index) : -5;
     let shouldDisplayHovering = activeIndex !== this.props.rowData.index;
     let Row = React.cloneElement(this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, this.props.active), {onLongPress: this.handleLongPress});
-    return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0, opacity: 0}: null} ref="view">
+    return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0, opacity: 0, overflow: 'hidden'}: null} ref="view">
           {this.props.hovering && shouldDisplayHovering ? this.props.activeDivider : null}
-          {Row}
+          {this.props.active && this.props.list.state.hovering ? null : Row}
         </View>
   }
 });
@@ -72,12 +72,9 @@ var SortableListView = React.createClass({
       
     let currentPanValue = {x: 0, y: 0};
     this.state = {
-      ds: new ListView.DataSource({rowHasChanged: (r1, r2) => {
-        let dataChanged = r1 == r2;
-        return true
-      }}),
-      sorting: false,
+      ds: new ListView.DataSource({rowHasChanged: (r1, r2) =>  true}),
       active: false,
+      hovering: false,
       pan: new Animated.ValueXY(currentPanValue)
     };
     let onPanResponderMoveCb = Animated.event([null, {
@@ -87,7 +84,6 @@ var SortableListView = React.createClass({
 
     this.state.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetResponderCapture: () => true,
       onMoveShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderMove: (evt, gestureState) => {
@@ -100,28 +96,36 @@ var SortableListView = React.createClass({
        onPanResponderGrant: (e, gestureState) => {
           this.state.pan.setOffset(currentPanValue);
           this.state.pan.setValue(currentPanValue);
-      },  
+      },
+      onPanResponderTerminate: function() {
+      },
+      onPanResponderEnd: function() {
+      },
       onPanResponderRelease: (e) => {
-        if (!this.state.active) return;
-       // LayoutAnimation.easeInEaseOut();
+        if (!this.state.active) {
+          if (this.state.hovering) this.setState({hovering: false});
+          return;
+        } 
         let itemHeight = this.state.active.layout.frameHeight;
         let fromIndex = this.order.indexOf(this.state.active.rowData.index);
-        let toIndex = Number(this.state.hovering);
+        let toIndex = this.state.hovering === false ?  fromIndex : Number(this.state.hovering);
         if (toIndex > fromIndex) {
           toIndex--;
         }
-        if (toIndex === fromIndex) return;
+        if (toIndex === fromIndex) return this.setState({active: false, hovering: false});
         let args = {
           row: this.state.active.rowData,
           from: fromIndex,
           to: toIndex
         };
-        this.setState({active: false, sorting: false, hovering: false});
+
         this.props.onRowMoved && this.props.onRowMoved(args);
+        this.setState({hovering: false, active: false})
         let MAX_HEIGHT = this.scrollContainerHeight - HEIGHT + itemHeight; 
         if (this.scrollValue > MAX_HEIGHT) {
           this.scrollResponder.scrollTo(MAX_HEIGHT);
         }
+
       }
      });
     
@@ -196,7 +200,6 @@ var SortableListView = React.createClass({
     this.state.pan.setValue({x: 0, y: 0});
     LayoutAnimation.easeInEaseOut();
     this.setState({
-      sorting: true,
       active: row
     },  this.scrollAnimation);
     
