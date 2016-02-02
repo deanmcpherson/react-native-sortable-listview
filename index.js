@@ -35,10 +35,10 @@ var Row = React.createClass({
   
     let activeIndex = activeData ? Number(activeData.rowData.index) : -5;
     let shouldDisplayHovering = activeIndex !== this.props.rowData.index;
-    let Row = React.cloneElement(this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, this.props.active), {onLongPress: this.handleLongPress});
-    return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0, opacity: 0, overflow: 'hidden'}: null} ref="view">
+    let Row = React.cloneElement(this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, this.props.active), {onLongPress: this.handleLongPress, onPressOut: this.props.list.cancel});
+    return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0, opacity: 0} : null} ref="view">
           {this.props.hovering && shouldDisplayHovering ? this.props.activeDivider : null}
-          {this.props.active && this.props.list.state.hovering ? null : Row}
+          {Row}
         </View>
   }
 });
@@ -87,21 +87,19 @@ var SortableListView = React.createClass({
       onMoveShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderMove: (evt, gestureState) => {
-        gestureState.dx = 0;
 
+        gestureState.dx = 0;
         this.moveY = gestureState.moveY;
         onPanResponderMoveCb(evt, gestureState);
        },
 
        onPanResponderGrant: (e, gestureState) => {
+          this.moved = true;
           this.state.pan.setOffset(currentPanValue);
           this.state.pan.setValue(currentPanValue);
       },
-      onPanResponderTerminate: function() {
-      },
-      onPanResponderEnd: function() {
-      },
       onPanResponderRelease: (e) => {
+        this.moved = false;
         if (!this.state.active) {
           if (this.state.hovering) this.setState({hovering: false});
           return;
@@ -120,7 +118,11 @@ var SortableListView = React.createClass({
         };
 
         this.props.onRowMoved && this.props.onRowMoved(args);
-        this.setState({hovering: false, active: false})
+        this.setState({
+          active: false,
+          hovering: false
+        });
+
         let MAX_HEIGHT = this.scrollContainerHeight - HEIGHT + itemHeight; 
         if (this.scrollValue > MAX_HEIGHT) {
           this.scrollResponder.scrollTo(MAX_HEIGHT);
@@ -130,6 +132,14 @@ var SortableListView = React.createClass({
      });
     
     return this.state;
+  },
+  cancel: function() {
+    if (!this.moved) {
+      this.setState({
+        active: false,
+        hovering: false
+      });
+    }
   },
   componentDidMount: function() {
     this.scrollResponder = this.refs.list.getScrollResponder();

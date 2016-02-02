@@ -49,7 +49,7 @@ let order = Object.keys(data); //Array of keys
 
 let RowComponent = React.createClass({
   render: function() {
-    return <TouchableHighlight underlayColor={'#eee'} style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}} onLongPress={this.props.onLongPress}>
+    return <TouchableHighlight underlayColor={'#eee'} style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}} onLongPress={this.props.onLongPress}> onPressOut={this.props.onPressOut}>
         <Text>{this.props.data.text}</Text>
       </TouchableHighlight>
   }
@@ -81,7 +81,7 @@ See
 
 ## Props
 
-SortableListView passes through all the standard ListView properties to ListView, except for dataSource. The renderRow method must render a component that forwards the onLongPress method. Calling the onLongPress method will enable the drag and drop on the row.
+SortableListView passes through all the standard ListView properties to ListView, except for dataSource. The renderRow method must render a component that forwards onLongPress and onPressOut methods. Calling the onLongPress method will enable the drag and drop on the row and onPressOut will cancel it.
 
  - **`onRowMoved`** _(Function)_ - should return a function that is passed a single object when a row is dropped. The object contains three properties `from`, `to`, and `row`. `from` and `to` are the order indexes being requested to move. `row` is all the info available about the row being dropped.
  - **`data`** _(Object)_ - Takes an object.
