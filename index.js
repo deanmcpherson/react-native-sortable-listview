@@ -38,7 +38,7 @@ var Row = React.createClass({
     let Row = React.cloneElement(this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, this.props.active), {onLongPress: this.handleLongPress, onPressOut: this.props.list.cancel});
     return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0, opacity: 0} : null} ref="view">
           {this.props.hovering && shouldDisplayHovering ? this.props.activeDivider : null}
-          {this.props.active && this.props.list.state.hovering || !this.props._legacySupport ? null : Row}
+          {this.props.active && this.props.list.state.hovering && !this.props._legacySupport ? null : Row}
         </View>
   }
 });
