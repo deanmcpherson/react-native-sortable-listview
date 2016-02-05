@@ -1,5 +1,5 @@
 var React = require('react-native');
-
+var TimerMixin = require('react-timer-mixin');
 var {
   ListView,
   LayoutAnimation,
@@ -29,6 +29,9 @@ var Row = React.createClass({
       });
     });
   },
+  measure: function() {
+    return this.refs.view.measure.apply(this, Array.from(arguments));
+  },
   render: function() {
     let layout = this.props.list.layoutMap[this.props.rowData.index];
     let activeData = this.props.list.state.active;
@@ -38,7 +41,7 @@ var Row = React.createClass({
     let Row = React.cloneElement(this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, this.props.active), {onLongPress: this.handleLongPress, onPressOut: this.props.list.cancel});
     return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0, opacity: 0} : null} ref="view">
           {this.props.hovering && shouldDisplayHovering ? this.props.activeDivider : null}
-          {this.props.active && this.props.list.state.hovering && !this.props._legacySupport ? null : Row}
+          {this.props.active && this.props.list.state.hovering && this.props._legacySupport ? null : Row}
         </View>
   }
 });
@@ -53,6 +56,7 @@ var SortRow = React.createClass({
         position: 'absolute',
         left: 0,
         right: 0,
+        opacity: .2,
         height: layout.frameHeight,
         overflow: 'hidden',
         backgroundColor: 'transparent',
@@ -62,31 +66,44 @@ var SortRow = React.createClass({
   },
   render: function() {
      let handlers = this.props.panResponder.panHandlers;
-    return <Animated.View style={[this.state.style, this.props.list.state.pan.getLayout()]}> 
+    return <Animated.View ref="view" style={[this.state.style, this.props.list.state.pan.getLayout()]}> 
+      <View style={{opacity: .85, flex: 1}}>
         {this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, true)}
+      </View>
       </Animated.View>
   }
 });
 
 var SortableListView = React.createClass({
+  mixins: [TimerMixin],
   getInitialState:function() {
       
     let currentPanValue = {x: 0, y: 0};
+    
     this.state = {
-      ds: new ListView.DataSource({rowHasChanged: (r1, r2) => true}),
+      ds: new ListView.DataSource({rowHasChanged: (r1, r2) => {
+      //  if (this.props.rowHasChanged) return this.props.rowHasChanged(r1, r2);
+        return false;
+      }}),
       active: false,
       hovering: false,
       pan: new Animated.ValueXY(currentPanValue)
     };
+    this.listener = this.state.pan.addListener(e => this.panY = e.y);
     let onPanResponderMoveCb = Animated.event([null, {
            dx: this.state.pan.x, // x,y are Animated.Value
            dy: this.state.pan.y,
       }]);
 
     this.state.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
+      onStartShouldSetPanResponder: (e) => true,
+      onMoveShouldSetPanResponderCapture: (e, a) => {
+        //Only capture when moving vertically, this helps for child swiper rows.
+        let vy = Math.abs(a.vy);
+        let vx = Math.abs(a.vx);
+        
+        return (vy * 1.3) > vx;
+      },
       onPanResponderMove: (evt, gestureState) => {
         gestureState.dx = 0;
         this.moveY = gestureState.moveY;
@@ -107,7 +124,8 @@ var SortableListView = React.createClass({
         let itemHeight = this.state.active.layout.frameHeight;
         let fromIndex = this.order.indexOf(this.state.active.rowData.index);
         let toIndex = this.state.hovering === false ?  fromIndex : Number(this.state.hovering);
-        if (toIndex > fromIndex) {
+        let up = toIndex > fromIndex;
+        if (up) {
           toIndex--;
         }
         if (toIndex === fromIndex) return this.setState({active: false, hovering: false});
@@ -116,18 +134,25 @@ var SortableListView = React.createClass({
           from: fromIndex,
           to: toIndex
         };
-
+            
         this.props.onRowMoved && this.props.onRowMoved(args);
-        this.setState({
-          active: false,
-          hovering: false
-        });
+        if (this.props._legacySupport) { //rely on parent data changes to set state changes
+          //LayoutAnimation.easeInEaseOut()
+          this.state.active = false;
+          this.state.hovering = false;
+        } else {
+          this.setState({
+            active: false,
+            hovering: false
+          });
+        }
 
-        let MAX_HEIGHT = this.scrollContainerHeight - HEIGHT + itemHeight; 
+        let MAX_HEIGHT = Math.max(0, this.scrollContainerHeight - HEIGHT + itemHeight); 
         if (this.scrollValue > MAX_HEIGHT) {
           this.scrollResponder.scrollTo(MAX_HEIGHT);
         }
-
+    
+        this.state.active = false;
       }
      });
     
@@ -152,20 +177,18 @@ var SortableListView = React.createClass({
   scrollContainerHeight: HEIGHT * 2, //Gets calculated on scroll, but if you havent scrolled needs an initial value
   scrollAnimation: function() {
     if (this.isMounted() && this.state.active) {
-      if (this.moveY == undefined) return requestAnimationFrame(this.scrollAnimation);
+      if (this.moveY == undefined) return this.requestAnimationFrame(this.scrollAnimation);
 
       let SCROLL_OFFSET = this.wrapperLayout.pageY;
       let moveY = this.moveY - SCROLL_OFFSET;
 
-      let SCROLL_LOWER_BOUND = 100;
+      let SCROLL_LOWER_BOUND = 80 + SCROLL_OFFSET;
       let SCROLL_HIGHER_BOUND = this.listLayout.height - SCROLL_LOWER_BOUND;
-      SCROLL_LOWER_BOUND += SCROLL_OFFSET;
-
-
+  
       let MAX_SCROLL_VALUE = this.scrollContainerHeight - HEIGHT + (this.state.active.layout.frameHeight * 2);
       let currentScrollValue = this.scrollValue;
       let newScrollValue = null;
-      let SCROLL_MAX_CHANGE = 15;
+      let SCROLL_MAX_CHANGE = 20;
 
       if (moveY < SCROLL_LOWER_BOUND && currentScrollValue > 0) {
         let PERCENTAGE_CHANGE = 1 - (moveY / SCROLL_LOWER_BOUND);
@@ -174,9 +197,7 @@ var SortableListView = React.createClass({
           
       }
       if (moveY > SCROLL_HIGHER_BOUND && currentScrollValue < MAX_SCROLL_VALUE) {
-
         let PERCENTAGE_CHANGE = 1 - ((this.listLayout.height - moveY) / SCROLL_LOWER_BOUND);
-     
         newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
         if (newScrollValue > MAX_SCROLL_VALUE) newScrollValue = MAX_SCROLL_VALUE;
       }
@@ -185,8 +206,22 @@ var SortableListView = React.createClass({
          this.scrollResponder.scrollWithoutAnimationTo(this.scrollValue, 0);
       }
       this.checkTargetElement();
-      requestAnimationFrame(this.scrollAnimation);
+      this.requestAnimationFrame(this.scrollAnimation);
     }
+  }, 
+  calculateDestinationY: function(index) {
+    let i = 0;
+    let x = 0;
+    let row;
+    let order = this.order;
+
+    for (x = 0; x < order.length; x++) {
+      let key = order[x];
+      row = this.layoutMap[key];
+      if (x == index) return i;
+      i += row.height;
+    }
+    return 0;
   },
   checkTargetElement() {
     let scrollValue = this.scrollValue;
@@ -210,6 +245,8 @@ var SortableListView = React.createClass({
     if (!isLast) x--;
     if (x != this.state.hovering) {
       LayoutAnimation.easeInEaseOut();
+      this._previouslyHovering = this.state.hovering;
+      this.__activeY = this.panY;
       this.setState({
         hovering: String(x)
       })
@@ -217,6 +254,7 @@ var SortableListView = React.createClass({
 
   },
   layoutMap: {},
+  _rowRefs: {},
   handleRowActive: function(row) {
     this.state.pan.setValue({x: 0, y: 0});
     LayoutAnimation.easeInEaseOut();
@@ -242,6 +280,7 @@ var SortableListView = React.createClass({
       key={index} 
       active={active} 
       list={this}
+      ref={view => { this._rowRefs[active ? 'ghost' : index] = view; }}
       hovering={hoveringIndex == index}
       panResponder={this.state.panResponder}
       rowData={{data, section, index}} 
@@ -268,7 +307,7 @@ var SortableListView = React.createClass({
   },
   render: function() {
     let dataSource = this.state.ds.cloneWithRows(this.props.data, this.props.order);
-     
+      global.that = this;
     return <View ref="wrapper" style={{flex: 1}}>
       <ListView
         {...this.props}
