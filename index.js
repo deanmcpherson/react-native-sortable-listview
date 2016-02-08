@@ -265,7 +265,7 @@ var SortableListView = React.createClass({
   },
   renderActiveDivider: function() {
     if (this.props.activeDivider) this.props.activeDivider();
-    return <View style={{height: this.state.active && this.state.active.layout.frameHeight}} />
+    return <View style={{height: this.state.active ? this.state.active.layout.frameHeight : null}} />
   },
   renderRow: function(data, section, index, highlightfn, active) {
     let Component = active ? SortRow : Row;
