@@ -313,7 +313,7 @@ var SortableListView = React.createClass({
   render: function() {
     let dataSource = this.state.ds.cloneWithRows(this.props.data, this.props.order);
       global.that = this;
-    return <View ref="wrapper" onLayout={()=>{}}>
+    return <View ref="wrapper" style={{flex: 1}} onLayout={()=>{}}>
       <ListView
         enableEmptySections={true}
         {...this.props}
