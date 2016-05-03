@@ -148,12 +148,13 @@ var SortableListView = React.createClass({
           });
         }
 
-        let MAX_HEIGHT = Math.max(0, this.scrollContainerHeight - HEIGHT + itemHeight);
+        let MAX_HEIGHT = Math.max(0, this.scrollContainerHeight - HEIGHT);
         if (this.scrollValue > MAX_HEIGHT) {
           this.scrollResponder.scrollTo({y: MAX_HEIGHT});
         }
 
         this.state.active = false;
+        this.state.hovering = false;
       }
      });
 
@@ -179,7 +180,7 @@ var SortableListView = React.createClass({
 
   },
   scrollValue: 0,
-  scrollContainerHeight: HEIGHT * 2, //Gets calculated on scroll, but if you havent scrolled needs an initial value
+  scrollContainerHeight: HEIGHT * 1.2, //Gets calculated on scroll, but if you havent scrolled needs an initial value
   scrollAnimation: function() {
     if (this.isMounted() && this.state.active) {
       if (this.moveY == undefined) return this.requestAnimationFrame(this.scrollAnimation);
@@ -312,7 +313,6 @@ var SortableListView = React.createClass({
   },
   render: function() {
     let dataSource = this.state.ds.cloneWithRows(this.props.data, this.props.order);
-      global.that = this;
     return <View ref="wrapper" style={{flex: 1}} onLayout={()=>{}}>
       <ListView
         enableEmptySections={true}
@@ -322,9 +322,15 @@ var SortableListView = React.createClass({
         dataSource={dataSource}
         onScroll={e => {
           this.scrollValue = e.nativeEvent.contentOffset.y;
-          this.scrollContainerHeight = e.nativeEvent.contentSize.height;
+          if (!this._scrolling) {
+            // Only cache the scroll container height at the beginning of the scroll.
+            this._scrolling = true;
+            this.scrollContainerHeight = e.nativeEvent.contentSize.height;
+          }
+          
           if (this.props.onScroll) this.props.onScroll(e);
         }}
+        onScrollAnimationEnd={() => this._scrolling = false}
         onLayout={(e) => this.listLayout = e.nativeEvent.layout}
         scrollEnabled={!this.state.active}
         renderRow={this.renderRow}
