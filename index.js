@@ -112,12 +112,13 @@ var SortableListView = React.createClass({
 
        onPanResponderGrant: (e, gestureState) => {
           this.moved = true;
-
+          this.props.onMoveStart &&  this.props.onMoveStart();
           this.state.pan.setOffset(currentPanValue);
           this.state.pan.setValue(currentPanValue);
       },
       onPanResponderRelease: (e) => {
         this.moved = false;
+        this.props.onMoveEnd && this.props.onMoveEnd();
         if (!this.state.active) {
           if (this.state.hovering) this.setState({hovering: false});
           return;
