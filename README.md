@@ -1,7 +1,7 @@
 # react-native-sortable-listview
 Drag drop capable wrapper of ListView for React Native. Allows for dragging and dropping of rows with automatic scrolling while dragging.
 
-Note that this quite raw still, and is not recommended for production use. Tested on React Native 0.18+.
+Note that this quite raw still, and is not recommended for production use. BREAKING CHANGE IN 0.0.8, due to react being separated out from the react native project, 0.0.8+ will only work on React Native 0.26+.
 
 ## Add it to your project
 
