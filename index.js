@@ -102,7 +102,7 @@ var SortableListView = React.createClass({
         let vy = Math.abs(a.vy);
         let vx = Math.abs(a.vx);
 
-        return (vy ) > vx;
+        return (vy) > vx  && this.state.active;
       },
       onPanResponderMove: (evt, gestureState) => {
         gestureState.dx = 0;
