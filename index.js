@@ -66,7 +66,7 @@ var SortRow = React.createClass({
   },
   render: function() {
      let handlers = this.props.panResponder.panHandlers;
-    return <Animated.View ref="view" style={[this.state.style, this.props.list.state.pan.getLayout()]}>
+    return <Animated.View ref="view" style={[this.state.style, this.props.sortRowStyle, this.props.list.state.pan.getLayout()]}>
       <View style={{opacity: .85, flex: 1}}>
         {this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, true)}
       </View>
@@ -328,7 +328,7 @@ var SortableListView = React.createClass({
             this._scrolling = true;
             this.scrollContainerHeight = e.nativeEvent.contentSize.height;
           }
-          
+
           if (this.props.onScroll) this.props.onScroll(e);
         }}
         onScrollAnimationEnd={() => this._scrolling = false}
