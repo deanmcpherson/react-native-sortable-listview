@@ -21,7 +21,7 @@ var Row = React.createClass({
   handleLongPress: function(e) {
     this.refs.view.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
       let layout = {frameX, frameY, frameWidth, frameHeight, pageX, pageY};
-       this.props.onRowActive({
+      this.props.onRowActive({
         layout: layout,
         touch: e.nativeEvent,
         rowData: this.props.rowData
@@ -38,7 +38,7 @@ var Row = React.createClass({
     let activeIndex = activeData ? Number(activeData.rowData.index) : -5;
     let shouldDisplayHovering = activeIndex !== this.props.rowData.index;
     let Row = React.cloneElement(this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, this.props.active), {onLongPress: this.handleLongPress, onPressOut: this.props.list.cancel});
-    return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0, opacity: 0} : null} ref="view">
+    return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0.01, opacity: 0} : null} ref="view">
           {this.props.hovering && shouldDisplayHovering ? this.props.activeDivider : null}
           {this.props.active && this.props.list.state.hovering && this.props._legacySupport ? null : Row}
         </View>
@@ -65,11 +65,11 @@ var SortRow = React.createClass({
   },
   render: function() {
     let handlers = this.props.panResponder.panHandlers;
-    return <Animated.View ref="view" style={[this.state.style, this.props.sortRowStyle, this.props.list.state.pan.getLayout()]}>
-      <View style={{opacity: .85, flex: 1}}>
+    return (
+      <Animated.View ref="view" style={[this.state.style, this.props.sortRowStyle, this.props.list.state.pan.getLayout()]}>
         {this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, true)}
-      </View>
       </Animated.View>
+    );
   }
 });
 
@@ -120,6 +120,7 @@ var SortableListView = React.createClass({
         this.props.onMoveEnd && this.props.onMoveEnd();
         if (!this.state.active) {
           if (this.state.hovering) this.setState({hovering: false});
+          this.moveY = null;
           return;
         }
         let itemHeight = this.state.active.layout.frameHeight;
@@ -155,6 +156,7 @@ var SortableListView = React.createClass({
 
         this.state.active = false;
         this.state.hovering = false;
+        this.moveY = null;
       }
      });
 
@@ -249,8 +251,10 @@ var SortableListView = React.createClass({
   handleRowActive: function(row) {
     this.state.pan.setValue({x: 0, y: 0});
     LayoutAnimation.easeInEaseOut();
+    this.moveY = row.layout.pageY;
     this.setState({
-      active: row
+      active: row,
+      hovering: row.rowData.index,
     },  this.scrollAnimation);
 
   },
