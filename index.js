@@ -149,7 +149,7 @@ var SortableListView = React.createClass({
           });
         }
 
-        let MAX_HEIGHT = Math.max(0, this.scrollContainerHeight - this.listLayout.height);
+        let MAX_HEIGHT = Math.max(0, this.scrollContainerHeight - this.listLayout.height + itemHeight);
         if (this.scrollValue > MAX_HEIGHT) {
           this.scrollResponder.scrollTo({y: MAX_HEIGHT});
         }
@@ -312,15 +312,11 @@ var SortableListView = React.createClass({
         dataSource={dataSource}
         onScroll={e => {
           this.scrollValue = e.nativeEvent.contentOffset.y;
-          if (!this._scrolling) {
-            // Only cache the scroll container height at the beginning of the scroll.
-            this._scrolling = true;
-            this.scrollContainerHeight = e.nativeEvent.contentSize.height;
-          }
-
           if (this.props.onScroll) this.props.onScroll(e);
         }}
-        onScrollAnimationEnd={() => this._scrolling = false}
+        onContentSizeChange={(width, height) => {
+          this.scrollContainerHeight = height;
+        }}
         onLayout={(e) => this.listLayout = e.nativeEvent.layout}
         scrollEnabled={!this.state.active && this.props.scrollEnabled}
         renderRow={this.renderRow}
