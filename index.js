@@ -163,8 +163,7 @@ var SortableListView = React.createClass({
 
     return this.state;
   },
-  cancel: function() {
-    console.log('cancel')
+  cancel: function() { 
     if (!this.moved) {
       this.setState({
         active: false,
