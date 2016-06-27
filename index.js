@@ -37,7 +37,7 @@ var Row = React.createClass({
 
     let activeIndex = activeData ? Number(activeData.rowData.index) : -5;
     let shouldDisplayHovering = activeIndex !== this.props.rowData.index;
-    let Row = React.cloneElement(this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, this.props.active), {onLongPress: this.handleLongPress, onPressOut: this.props.list.cancel});
+    let Row = React.cloneElement(this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, null, this.props.active), {sortHandlers: {onLongPress: this.handleLongPress, onPressOut: this.props.list.cancel}, onLongPress: this.handleLongPress, onPressOut: this.props.list.cancel});
     return <View onLayout={this.props.onRowLayout} style={this.props.active && this.props.list.state.hovering ? {height: 0.01, opacity: 0} : null} ref="view">
           {this.props.hovering && shouldDisplayHovering ? this.props.activeDivider : null}
           {this.props.active && this.props.list.state.hovering && this.props._legacySupport ? null : Row}
@@ -116,6 +116,7 @@ var SortableListView = React.createClass({
           this.state.pan.setValue(currentPanValue);
       },
       onPanResponderRelease: (e) => {
+
         this.moved = false;
         this.props.onMoveEnd && this.props.onMoveEnd();
         if (!this.state.active) {
@@ -163,6 +164,7 @@ var SortableListView = React.createClass({
     return this.state;
   },
   cancel: function() {
+    console.log('cancel')
     if (!this.moved) {
       this.setState({
         active: false,
