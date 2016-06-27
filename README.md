@@ -81,7 +81,7 @@ See
 
 ## Props
 
-SortableListView passes through all the standard ListView properties to ListView, except for dataSource. The renderRow method must render a component that forwards onLongPress and onPressOut methods. Calling the onLongPress method will enable the drag and drop on the row and onPressOut will cancel it.
+SortableListView passes through all the standard ListView properties to ListView, except for dataSource. The renderRow method must render a component that forwards onLongPress and onPressOut methods to a Touchable* child component.  Calling the onLongPress method will enable the drag and drop on the row and onPressOut will cancel it. You can also apply the default behaviour by spreading the sortHandlers prop (e.g. `<TouchableHightlight {...this.props.sortHandlers} >..`)
 
  - **`onRowMoved`** _(Function)_ - should return a function that is passed a single object when a row is dropped. The object contains three properties `from`, `to`, and `row`. `from` and `to` are the order indexes being requested to move. `row` is all the info available about the row being dropped.
  - **`data`** _(Object)_ - Takes an object.
