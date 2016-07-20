@@ -319,7 +319,7 @@ var SortableListView = React.createClass({
           this.scrollContainerHeight = height;
         }}
         onLayout={(e) => this.listLayout = e.nativeEvent.layout}
-        scrollEnabled={!this.state.active && this.props.scrollEnabled}
+        scrollEnabled={!this.state.active && (this.props.scrollEnabled !== false)}
         renderRow={this.renderRow}
       />
       {this.renderActive()}
