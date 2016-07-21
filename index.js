@@ -16,6 +16,7 @@ var Row = React.createClass({
     if (props.hovering !== this.props.hovering) return true;
     if (props.active !== this.props.active) return true;
     if (props.rowData.data !== this.props.rowData.data) return true;
+    if (props.rowHasChanged) return props.rowHasChanged(props.rowData.data, this.props.rowData.data);
     return false;
   },
   handleLongPress: function(e) {
@@ -81,7 +82,7 @@ var SortableListView = React.createClass({
 
     this.state = {
       ds: new ListView.DataSource({rowHasChanged: (r1, r2) => {
-      //  if (this.props.rowHasChanged) return this.props.rowHasChanged(r1, r2);
+        if (this.props.rowHasChanged) return this.props.rowHasChanged(r1, r2);
         return false;
       }}),
       active: false,
