@@ -12,11 +12,12 @@ import {
 
 let HEIGHT = Dimensions.get('window').height;
 var Row = React.createClass({
+  _data: {},
   shouldComponentUpdate: function(props) {
     if (props.hovering !== this.props.hovering) return true;
     if (props.active !== this.props.active) return true;
     if (props.rowData.data !== this.props.rowData.data) return true;
-    if (props.rowHasChanged) return props.rowHasChanged(props.rowData.data, this.props.rowData.data);
+    if (props.rowHasChanged) return props.rowHasChanged(props.rowData.data, this._data);
     return false;
   },
   handleLongPress: function(e) {
@@ -28,6 +29,10 @@ var Row = React.createClass({
         rowData: this.props.rowData
       });
     });
+  },
+  componentDidUpdate: function(props) {
+    //Take a shallow copy of the active data. So we can do manual comparisons of rows if needed.
+    this._data = Object.assign({}, props.rowData.data);
   },
   measure: function() {
     return this.refs.view.measure.apply(this, Array.from(arguments));
@@ -266,6 +271,7 @@ var SortableListView = React.createClass({
     return <View style={{height: height}} />
   },
   renderRow: function(data, section, index, highlightfn, active) {
+
     let Component = active ? SortRow : Row;
     let isActiveRow = (!active && this.state.active && this.state.active.rowData.index === index);
     if (!active && isActiveRow) {
@@ -305,6 +311,7 @@ var SortableListView = React.createClass({
   },
   render: function() {
     let dataSource = this.state.ds.cloneWithRows(this.props.data, this.props.order);
+
     return <View ref="wrapper" style={{flex: 1}} onLayout={()=>{}}>
       <ListView
         enableEmptySections={true}
