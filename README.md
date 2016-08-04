@@ -86,6 +86,7 @@ SortableListView passes through all the standard ListView properties to ListView
  - **`rowHasChanged`** _(Function)_ - Takes an function that is called to compare row data. It is passed the new row data and a shallow copy of the previous row data. **This is necessary to define if row data is not immutible for row changes to correctly propagate, if your row data is immutable DO NOT DEFINE, see #28 for reasons why**.
  - **`order`** _(Array)_  (optional) - Expects an array of keys to determine the current order of rows.
  - **`sortRowStyle`** _(Object)_ (optional) - Expects a `style` object, which is to be applied on the rows when they're being dragged.
+ - **`disableSorting` _(boolean) (optional) - When set to true, all sorting will be disabled, which will effectively make the SortableListView act like a normal ListView.
 
 ---
 
