@@ -9,7 +9,7 @@ import {
   PanResponder,
   TouchableWithoutFeedback
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view';
 
 let HEIGHT = Dimensions.get('window').height;
 var Row = React.createClass({
@@ -317,7 +317,7 @@ var SortableListView = React.createClass({
     let dataSource = this.state.ds.cloneWithRows(this.props.data, this.props.order);
 
     return <View ref="wrapper" style={{flex: 1}} onLayout={()=>{}}>
-      <KeyboardAwareScrollView
+      <KeyboardAwareListView
         enableEmptySections={true}
         {...this.props}
         {...this.state.panResponder.panHandlers}
@@ -333,8 +333,6 @@ var SortableListView = React.createClass({
         onLayout={(e) => this.listLayout = e.nativeEvent.layout}
         scrollEnabled={!this.state.active && (this.props.scrollEnabled !== false)}
         renderRow={this.renderRow}
-        extraHeight={this.props.extraHeight}
-        keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps}
       />
       {this.renderActive()}
     </View>
