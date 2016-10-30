@@ -227,7 +227,7 @@ var SortableListView = React.createClass({
   },
   checkTargetElement() {
     let scrollValue = this.scrollValue;
-    let moveY = this.moveY;
+    let moveY = this.moveY + (this.state.active.layout.frameHeight / 2);
     let targetPixel = scrollValue + moveY - this.wrapperLayout.pageY;
     let i = 0;
     let x = 0;
