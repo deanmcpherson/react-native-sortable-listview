@@ -47,9 +47,16 @@ let order = Object.keys(data); //Array of keys
 
 let RowComponent = React.createClass({
   render: function() {
-    return <TouchableHighlight underlayColor={'#eee'} style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}} {...this.props.sortHandlers}>
+    return (
+      <TouchableHighlight
+        underlayColor={'#eee'}
+        delayLongPress={500} {/* 500ms hold delay */}
+        style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}} 
+        {...this.props.sortHandlers}
+      >
         <Text>{this.props.data.text}</Text>
       </TouchableHighlight>
+    );
   }
 })
 
