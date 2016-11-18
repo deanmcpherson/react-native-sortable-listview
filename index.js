@@ -33,7 +33,7 @@ var Row = React.createClass({
   componentDidUpdate: function(props) {
     //Take a shallow copy of the active data. So we can do manual comparisons of rows if needed.
     if (props.rowHasChanged) {
-      this._data = Object.assign({}, props.rowData.data);
+      this._data = (typeof props.rowData.data === 'object') ? Object.assign({}, props.rowData.data) : props.rowData.data;
     }
   },
   measure: function() {
