@@ -1,13 +1,13 @@
-let SortableListView = require('./SortableListView');
-let React = require('react-native');
+let SortableListView = require('./index');
+let React = require('react');
 let {
   View,
   Text,
   TouchableHighlight
-} = React;
+} = require('react-native');
 
 
-let data = { 
+let data = {
   hello: {text: 'world'},
   how: {text: 'are you'},
   test: {text: 123},
