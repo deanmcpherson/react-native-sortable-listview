@@ -180,14 +180,24 @@ var SortableListView = React.createClass({
     }
   },
   componentDidMount: function() {
-    setTimeout(()=>{
+    let shouldUseTimeouts = typeof(this.props.shouldUseTimeouts) != 'undefined' ? this.props.shouldUseTimeouts : true;
+    if(shouldUseTimeouts){
+      setTimeout(()=>{
+        this.scrollResponder = this.refs.list.getScrollResponder();
+        this.refs.wrapper.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
+
+          let layout = {frameX, frameY, frameWidth, frameHeight, pageX, pageY};
+          this.wrapperLayout = layout;
+        });
+      }, 1);
+    } else {
       this.scrollResponder = this.refs.list.getScrollResponder();
       this.refs.wrapper.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
 
         let layout = {frameX, frameY, frameWidth, frameHeight, pageX, pageY};
         this.wrapperLayout = layout;
       });
-    }, 1);
+    }
 
   },
   scrollValue: 0,
