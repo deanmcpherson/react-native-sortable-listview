@@ -51,7 +51,7 @@ let RowComponent = React.createClass({
       <TouchableHighlight
         underlayColor={'#eee'}
         delayLongPress={500} {/* 500ms hold delay */}
-        style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}} 
+        style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}}
         {...this.props.sortHandlers}
       >
         <Text>{this.props.data.text}</Text>
@@ -78,6 +78,25 @@ let MyComponent = React.createClass({
 module.exports = MyComponent;
 
 ```
+
+## Android
+
+Animation quality is improved if you add native animation to your component:
+
+```javascript
+import {
+  UIManager,
+} from 'react-native';
+
+
+export default class MyClass extends Component {
+  componentWillMount() {
+    UIManager.setLayoutAnimationEnabledExperimental &&
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+
+```
+
 ## Example
 
 See
