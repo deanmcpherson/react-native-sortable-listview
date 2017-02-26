@@ -195,15 +195,15 @@ var SortableListView = React.createClass({
   scrollValue: 0,
   scrollContainerHeight: HEIGHT * 1.2, //Gets calculated on scroll, but if you havent scrolled needs an initial value
   scrollAnimation: function() {
-    if (this.isMounted() && this.state.active) {
+    if (this.isMounted() /* deprecated and unnecessary: using TimerMixin */ && this.state.active) {
       if (this.moveY == undefined) return this.requestAnimationFrame(this.scrollAnimation);
 
       let SCROLL_OFFSET = this.wrapperLayout.pageY;
       let moveY = this.moveY - SCROLL_OFFSET;
       let SCROLL_LOWER_BOUND = 80;
       let SCROLL_HIGHER_BOUND = this.listLayout.height - SCROLL_LOWER_BOUND;
-
-      let MAX_SCROLL_VALUE = this.scrollContainerHeight - this.listLayout.height + (this.state.active.layout.frameHeight * 2);
+      let NORMAL_SCROLL_MAX = this.scrollContainerHeight - this.listLayout.height;
+      let MAX_SCROLL_VALUE = NORMAL_SCROLL_MAX + (this.state.active.layout.frameHeight * 2 );
       let currentScrollValue = this.scrollValue;
       let newScrollValue = null;
       let SCROLL_MAX_CHANGE = 20;
@@ -217,6 +217,11 @@ var SortableListView = React.createClass({
         let PERCENTAGE_CHANGE = 1 - ((this.listLayout.height - moveY) / SCROLL_LOWER_BOUND);
         newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
         if (newScrollValue > MAX_SCROLL_VALUE) newScrollValue = MAX_SCROLL_VALUE;
+      }
+      if (moveY < SCROLL_HIGHER_BOUND && currentScrollValue > NORMAL_SCROLL_MAX ) {
+        let PERCENTAGE_CHANGE = 1 - ((this.listLayout.height - moveY) / SCROLL_LOWER_BOUND);
+        pc = PERCENTAGE_CHANGE;
+        newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
       }
       if (newScrollValue !== null) {
         this.scrollValue = newScrollValue;
