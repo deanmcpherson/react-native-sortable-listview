@@ -243,7 +243,7 @@ var SortableListView = React.createClass({
     let row;
     let order = this.order;
     let isLast = false;
-    while (i < targetPixel) {
+    while (i <= targetPixel) {
       let key = order[x];
       row = this.layoutMap[key];
       if (!row) {
@@ -290,7 +290,7 @@ var SortableListView = React.createClass({
     if (!active && isActiveRow) {
       active = {active: true};
     }
-    let hoveringIndex = this.order[this.state.hovering];
+    let hoveringIndex = this.order[this.state.hovering] || this.state.hovering;
     return (<Component
       {...this.props}
       activeDivider={this.renderActiveDivider()}
