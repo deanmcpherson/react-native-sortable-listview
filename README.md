@@ -100,7 +100,7 @@ export default class MyClass extends Component {
 ## Example
 
 See
-[example.js](https://github.com/deanmcpherson/react-native-sortable-listview/tree/master/example.js).
+[Sortable](https://github.com/deanmcpherson/react-native-sortable-listview/tree/master/Sortable).
 
 
 ## Props
