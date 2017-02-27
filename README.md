@@ -79,28 +79,9 @@ module.exports = MyComponent;
 
 ```
 
-## Android
-
-Animation quality is improved if you add native animation to your component:
-
-```javascript
-import {
-  UIManager,
-} from 'react-native';
-
-
-export default class MyClass extends Component {
-  componentWillMount() {
-    UIManager.setLayoutAnimationEnabledExperimental &&
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-
-```
-
 ## Example
 
-See
-[Sortable](https://github.com/deanmcpherson/react-native-sortable-listview/tree/master/Sortable).
+See [Sortable](https://github.com/deanmcpherson/react-native-sortable-listview/tree/master/Sortable).
 
 
 ## Props

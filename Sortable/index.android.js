@@ -9,17 +9,12 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  UIManager,
   View
 } from 'react-native';
 
 import MyComponent from './example';
 
 export default class Sortable extends Component {
-  componentWillMount() {
-    UIManager.setLayoutAnimationEnabledExperimental && 
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
   render() {
     return (
       <View style={styles.container}>
