@@ -218,7 +218,8 @@ var SortableListView = React.createClass({
         newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
         if (newScrollValue > MAX_SCROLL_VALUE) newScrollValue = MAX_SCROLL_VALUE;
       }
-      if (moveY < SCROLL_HIGHER_BOUND && currentScrollValue > NORMAL_SCROLL_MAX ) {
+      if (moveY < SCROLL_HIGHER_BOUND && currentScrollValue > NORMAL_SCROLL_MAX 
+          && NORMAL_SCROLL_MAX > 0) {
         let PERCENTAGE_CHANGE = 1 - ((this.listLayout.height - moveY) / SCROLL_LOWER_BOUND);
         pc = PERCENTAGE_CHANGE;
         newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
@@ -253,6 +254,7 @@ var SortableListView = React.createClass({
       i += row.height;
       x++;
     }
+    if (!isLast) x--;
 
     if (x != this.state.hovering) {
       LayoutAnimation.easeInEaseOut();
@@ -306,7 +308,7 @@ var SortableListView = React.createClass({
       />);
   },
   _updateLayoutMap(index, layout) {
-      if (!this.firstRowY || layout.y < this.firstRowY) {
+      if (this.firstRowY === undefined || layout.y < this.firstRowY) {
           this.firstRowY = layout.y;
       }
       this.layoutMap[index] = layout;
