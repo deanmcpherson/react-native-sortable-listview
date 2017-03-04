@@ -18,9 +18,6 @@ export default class Sortable extends Component {
   render() {
     return (
       <View style={styles.container}>
-          <View style={{height: 64, backgroundColor: 'lightblue'} /* fake nav bar */} >
-              <Text style={styles.welcome} > Sortable </Text>
-          </View>
           <MyComponent style={{flex: 1}}/>
       </View>
     );

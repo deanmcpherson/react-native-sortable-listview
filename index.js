@@ -234,34 +234,36 @@ var SortableListView = React.createClass({
     }
   },
   checkTargetElement() {
+    let SLOP = 1.0 // assume rows will be > 1 pixel high
     let scrollValue = this.scrollValue;
 
     let moveY = this.moveY - this.wrapperLayout.pageY;
-    let targetPixel = scrollValue + moveY - this.firstRowY;
 
+    let activeRowY = scrollValue + moveY - this.firstRowY;
+
+    let indexHeight = 0.0;
     let i = 0;
-    let x = 0;
     let row;
     let order = this.order;
     let isLast = false;
-    while (i <= targetPixel) {
-      let key = order[x];
+    while (indexHeight < activeRowY + SLOP) {
+      let key = order[i];
       row = this.layoutMap[key];
       if (!row) {
         isLast = true;
         break;
       }
-      i += row.height;
-      x++;
+      indexHeight += row.height;
+      i++;
     }
-    if (!isLast) x--;
-
-    if (x != this.state.hovering) {
+    if (!isLast) i--;
+    
+    if (i != this.state.hovering) {
       LayoutAnimation.easeInEaseOut();
       this._previouslyHovering = this.state.hovering;
       this.__activeY = this.panY;
       this.setState({
-        hovering: String(x)
+        hovering: String(i)
       })
     }
 

@@ -1,9 +1,10 @@
 let SortableListView = require('react-native-sortable-listview');
 let React = require('react');
 let {
-  View,
+  StyleSheet,
   Text,
-  TouchableHighlight
+  TouchableHighlight,
+  View,
 } = require('react-native');
 
 
@@ -73,21 +74,26 @@ let list4 = {
   v16: 16,
 }
 
-let data = list4;
+let data = list3;
 
 let order = Object.keys(data); //Array of keys
 
 let RowComponent = React.createClass({
   render: function() {
     return <TouchableHighlight underlayColor={'#eee'} style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}} {...this.props.sortHandlers}>
-        <Text>{data === list3 || data === list4? this.props.data: this.props.data.text}</Text>
+        <Text style={{fontSize: 20}}>{data === list3 || data === list4? this.props.data: this.props.data.text}</Text>
       </TouchableHighlight>
   }
 })
 
 let MyComponent = React.createClass({
   render: function() {
-    return <SortableListView
+    return (
+      <View style={styles.container}>
+         <View style={{height: 64, backgroundColor: 'lightblue'} /* fake nav bar */} >
+           <Text style={styles.welcome} > Sortable </Text>
+         </View>
+      <SortableListView
           style={{flex: 1, marginBottom: 0}}
           data={data}
           order={order}
@@ -96,8 +102,21 @@ let MyComponent = React.createClass({
             this.forceUpdate();
           }}
           renderRow={row => <RowComponent data={row} />}
-        />
+      />
+      </View> );
+
   }
 });
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+});
 module.exports = MyComponent;
