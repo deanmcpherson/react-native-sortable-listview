@@ -189,7 +189,7 @@ var SortableListView = React.createClass({
         let layout = {frameX, frameY, frameWidth, frameHeight, pageX, pageY};
         this.wrapperLayout = layout;
       });
-    }, 1);
+    }, 100);
 
   },
   scrollValue: 0,
@@ -222,7 +222,8 @@ var SortableListView = React.createClass({
           && NORMAL_SCROLL_MAX > 0) {
         let PERCENTAGE_CHANGE = 1 - ((this.listLayout.height - moveY) / SCROLL_LOWER_BOUND);
         pc = PERCENTAGE_CHANGE;
-        newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
+
+        //newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
       }
       if (newScrollValue !== null) {
         this.scrollValue = newScrollValue;
@@ -258,7 +259,7 @@ var SortableListView = React.createClass({
     }
     if (!isLast) i--;
     
-    if (i != this.state.hovering) {
+    if (i != this.state.hovering && i >= 0) {
       LayoutAnimation.easeInEaseOut();
       this._previouslyHovering = this.state.hovering;
       this.__activeY = this.panY;
