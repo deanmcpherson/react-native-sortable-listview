@@ -51,7 +51,7 @@ let RowComponent = React.createClass({
       <TouchableHighlight
         underlayColor={'#eee'}
         delayLongPress={500} {/* 500ms hold delay */}
-        style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}} 
+        style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}}
         {...this.props.sortHandlers}
       >
         <Text>{this.props.data.text}</Text>
@@ -78,10 +78,10 @@ let MyComponent = React.createClass({
 module.exports = MyComponent;
 
 ```
+
 ## Example
 
-See
-[example.js](https://github.com/deanmcpherson/react-native-sortable-listview/tree/master/example.js).
+See [Sortable](Sortable).
 
 
 ## Props
