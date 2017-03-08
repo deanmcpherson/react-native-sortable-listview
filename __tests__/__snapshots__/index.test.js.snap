@@ -11,7 +11,12 @@ exports[`test renders correctly 1`] = `
       <View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -52,7 +57,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -93,7 +103,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -134,7 +149,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -175,7 +195,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -216,7 +241,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -257,7 +287,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -298,7 +333,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -339,7 +379,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -380,7 +425,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -421,7 +471,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -462,7 +517,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -503,7 +563,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -544,7 +609,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -585,7 +655,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -626,7 +701,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
@@ -667,7 +747,12 @@ exports[`test renders correctly 1`] = `
         </View>
         <View
           onLayout={[Function]}
-          style={null}>
+          style={
+            Array [
+              null,
+              null,
+            ]
+          }>
           <View
             accessibilityComponentType={undefined}
             accessibilityLabel={undefined}
