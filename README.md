@@ -81,7 +81,7 @@ module.exports = MyComponent;
 
 ## Example
 
-See [Sortable](https://github.com/deanmcpherson/react-native-sortable-listview/tree/master/Sortable).
+See [Sortable](Sortable).
 
 
 ## Props
