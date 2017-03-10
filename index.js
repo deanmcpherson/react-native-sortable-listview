@@ -187,11 +187,13 @@ var SortableListView = React.createClass({
     }, 1);
   },
   measureWrapper: function() {
+    if (this.refs.wrapper) {
       this.refs.wrapper.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
 
         let layout = {frameX, frameY, frameWidth, frameHeight, pageX, pageY};
         this.wrapperLayout = layout;
       });
+    }
   },
   scrollValue: 0,
   scrollContainerHeight: HEIGHT * 1.2, //Gets calculated on scroll, but if you havent scrolled needs an initial value
