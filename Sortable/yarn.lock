@@ -2917,8 +2917,9 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
-"react-native-sortable-listview@file:../":
-  version "0.1.1"
+react-native-sortable-listview@*:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-sortable-listview/-/react-native-sortable-listview-0.2.1.tgz#0a075e5c23b9de6d5f6bbb43f8d936c7e7f98a47"
   dependencies:
     react-timer-mixin "^0.13.3"
 

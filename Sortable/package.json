@@ -4,12 +4,13 @@
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest"
+		"test": "jest",
+		"refresh": "rm -rf ./node_modules/react-native-sortable-listview;cd ..;find . -name .git -prune -o -name node_modules -prune -o -name Sortable -prune -o -type d -exec mkdir -p ./Sortable/node_modules/react-native-sortable-listview/{} \\; -o -exec cp {} ./Sortable/node_modules/react-native-sortable-listview/{} \\; ;cd Sortable;node node_modules/react-native/local-cli/cli.js start"
 	},
 	"dependencies": {
 		"react": "~15.4.0",
 		"react-native": "0.41.2",
-		"react-native-sortable-listview": "file:../"
+		"react-native-sortable-listview": "*"
 	},
 	"devDependencies": {
 		"babel-jest": "19.0.0",
