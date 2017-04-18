@@ -70,6 +70,8 @@ let MyComponent = React.createClass({
             order.splice(e.to, 0, order.splice(e.from, 1)[0]);
             this.forceUpdate();
           }}
+          onMoveStart={ () => console.log('on move start') }
+          onMoveEnd={ () => console.log('on move end') }
           renderRow={row => <RowComponent data={row} />}
         />
   }
@@ -94,6 +96,8 @@ SortableListView passes through all the standard ListView properties to ListView
  - **`order`** _(Array)_  (optional) - Expects an array of keys to determine the current order of rows.
  - **`sortRowStyle`** _(Object)_ (optional) - Expects a `style` object, which is to be applied on the rows when they're being dragged.
  - **`disableSorting`** _(boolean) (optional) - When set to true, all sorting will be disabled, which will effectively make the SortableListView act like a normal ListView.
+ - **`onMoveStart`** _(Function)_ (Optional) - Register a handler to be called when drag start.
+ - **`onMoveEnd`** _(Function)_ (Optional) - Register a handler to be called when move is completed.
 
 ## methods
 
