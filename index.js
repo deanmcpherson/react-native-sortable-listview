@@ -242,12 +242,6 @@ class SortableListView extends React.Component {
     }
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.scrollResponder = this.refs.list.getScrollResponder()
-    }, 1)
-  }
-
   measureWrapper = () => {
     if (this.refs.wrapper) {
       this.refs.wrapper.measure(
