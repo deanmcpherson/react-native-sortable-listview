@@ -1,5 +1,5 @@
 import React from 'react'
-import TimerMixin from 'react-timer-mixin'
+// import TimerMixin from 'react-timer-mixin'
 import {
   ListView,
   LayoutAnimation,
@@ -7,21 +7,23 @@ import {
   Animated,
   Dimensions,
   PanResponder,
-  TouchableWithoutFeedback,
 } from 'react-native'
 
 let HEIGHT = Dimensions.get('window').height
-var Row = React.createClass({
-  _data: {},
-  shouldComponentUpdate: function(props) {
+
+class Row extends React.Component {
+  _data = {}
+
+  shouldComponentUpdate(props) {
     if (props.hovering !== this.props.hovering) return true
     if (props.active !== this.props.active) return true
     if (props.rowData.data !== this.props.rowData.data) return true
     if (props.rowHasChanged)
       return props.rowHasChanged(props.rowData.data, this._data)
     return false
-  },
-  handleLongPress: function(e) {
+  }
+
+  handleLongPress = e => {
     this.refs.view.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
         let layout = { frameX, frameY, frameWidth, frameHeight, pageX, pageY }
@@ -32,19 +34,22 @@ var Row = React.createClass({
         })
       },
     )
-  },
-  componentDidUpdate: function(props) {
+  }
+
+  componentDidUpdate(props) {
     //Take a shallow copy of the active data. So we can do manual comparisons of rows if needed.
     if (props.rowHasChanged) {
       this._data = typeof props.rowData.data === 'object'
         ? Object.assign({}, props.rowData.data)
         : props.rowData.data
     }
-  },
-  measure: function() {
-    return this.refs.view.measure.apply(this, Array.from(arguments))
-  },
-  render: function() {
+  }
+
+  measure = (...args) => {
+    return this.refs.view.measure(...args)
+  }
+
+  render() {
     let layout = this.props.list.layoutMap[this.props.rowData.index]
     let activeData = this.props.list.state.active
 
@@ -82,15 +87,16 @@ var Row = React.createClass({
         {Row}
       </View>
     )
-  },
-})
+  }
+}
 
-var SortRow = React.createClass({
-  getInitialState: function() {
-    let layout = this.props.list.state.active.layout
-    let wrapperLayout = this.props.list.wrapperLayout
+class SortRow extends React.Component {
+  constructor(props) {
+    super(props)
+    let layout = props.list.state.active.layout
+    let wrapperLayout = props.list.wrapperLayout
 
-    return {
+    this.state = {
       style: {
         position: 'absolute',
         left: 0,
@@ -102,8 +108,9 @@ var SortRow = React.createClass({
         marginTop: layout.pageY - wrapperLayout.pageY, //Account for top bar spacing
       },
     }
-  },
-  render: function() {
+  }
+
+  render() {
     let handlers = this.props.panResponder.panHandlers
     return (
       <Animated.View
@@ -123,18 +130,18 @@ var SortRow = React.createClass({
         )}
       </Animated.View>
     )
-  },
-})
+  }
+}
 
-var SortableListView = React.createClass({
-  mixins: [TimerMixin],
-  getInitialState: function() {
+class SortableListView extends React.Component {
+  constructor(props, context) {
+    super(props, context)
     let currentPanValue = { x: 0, y: 0 }
 
     this.state = {
       ds: new ListView.DataSource({
         rowHasChanged: (r1, r2) => {
-          if (this.props.rowHasChanged) return this.props.rowHasChanged(r1, r2)
+          if (props.rowHasChanged) return props.rowHasChanged(r1, r2)
           return false
         },
       }),
@@ -168,13 +175,13 @@ var SortableListView = React.createClass({
 
       onPanResponderGrant: (e, gestureState) => {
         this.moved = true
-        this.props.onMoveStart && this.props.onMoveStart()
+        props.onMoveStart && props.onMoveStart()
         this.state.pan.setOffset(currentPanValue)
         this.state.pan.setValue(currentPanValue)
       },
       onPanResponderRelease: e => {
         this.moved = false
-        this.props.onMoveEnd && this.props.onMoveEnd()
+        props.onMoveEnd && props.onMoveEnd()
         if (!this.state.active) {
           if (this.state.hovering) this.setState({ hovering: false })
           this.moveY = null
@@ -197,8 +204,8 @@ var SortableListView = React.createClass({
           to: toIndex,
         }
 
-        this.props.onRowMoved && this.props.onRowMoved(args)
-        if (this.props._legacySupport) {
+        props.onRowMoved && props.onRowMoved(args)
+        if (props._legacySupport) {
           //rely on parent data changes to set state changes
           //LayoutAnimation.easeInEaseOut()
           this.state.active = false
@@ -224,22 +231,25 @@ var SortableListView = React.createClass({
       },
     })
 
-    return this.state
-  },
-  cancel: function() {
+    this.state = this.state
+  }
+
+  cancel = () => {
     if (!this.moved) {
       this.setState({
         active: false,
         hovering: false,
       })
     }
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     setTimeout(() => {
       this.scrollResponder = this.refs.list.getScrollResponder()
     }, 1)
-  },
-  measureWrapper: function() {
+  }
+
+  measureWrapper = () => {
     if (this.refs.wrapper) {
       this.refs.wrapper.measure(
         (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
@@ -248,12 +258,14 @@ var SortableListView = React.createClass({
         },
       )
     }
-  },
-  scrollValue: 0,
-  scrollContainerHeight: HEIGHT * 1.2, //Gets calculated on scroll, but if you havent scrolled needs an initial value
-  scrollAnimation: function() {
+  }
+
+  scrollValue = 0
+  scrollContainerHeight = HEIGHT * 1.2 //Gets calculated on scroll, but if you havent scrolled needs an initial value
+
+  scrollAnimation = () => {
     if (
-      this.isMounted() /* deprecated and unnecessary: using TimerMixin */ &&
+      // this.isMounted() /* deprecated and unnecessary: using TimerMixin */ &&
       this.state.active
     ) {
       if (this.moveY == undefined)
@@ -310,8 +322,9 @@ var SortableListView = React.createClass({
       this.checkTargetElement()
       this.requestAnimationFrame(this.scrollAnimation)
     }
-  },
-  checkTargetElement() {
+  }
+
+  checkTargetElement = () => {
     let SLOP = 1.0 // assume rows will be > 1 pixel high
     let scrollValue = this.scrollValue
 
@@ -344,11 +357,13 @@ var SortableListView = React.createClass({
         hovering: String(i),
       })
     }
-  },
-  firstRowY: undefined,
-  layoutMap: {},
-  _rowRefs: {},
-  handleRowActive: function(row) {
+  }
+
+  firstRowY = undefined
+  layoutMap = {}
+  _rowRefs = {}
+
+  handleRowActive = row => {
     if (this.props.disableSorting) return
     this.state.pan.setValue({ x: 0, y: 0 })
     LayoutAnimation.easeInEaseOut()
@@ -360,14 +375,16 @@ var SortableListView = React.createClass({
       },
       this.scrollAnimation,
     )
-  },
-  renderActiveDivider: function() {
+  }
+
+  renderActiveDivider = () => {
     let height = this.state.active ? this.state.active.layout.frameHeight : null
     if (this.props.renderActiveDivider)
       return this.props.renderActiveDivider(height)
     return <View style={{ height: height }} />
-  },
-  renderRow: function(data, section, index, highlightfn, active) {
+  }
+
+  renderRow = (data, section, index, highlightfn, active) => {
     let Component = active ? SortRow : Row
     let isActiveRow =
       !active && this.state.active && this.state.active.rowData.index === index
@@ -393,34 +410,41 @@ var SortableListView = React.createClass({
           this._updateLayoutMap(index, layout.nativeEvent.layout)}
       />
     )
-  },
-  _updateLayoutMap(index, layout) {
+  }
+
+  _updateLayoutMap = (index, layout) => {
     if (this.firstRowY === undefined || layout.y < this.firstRowY) {
       this.firstRowY = layout.y
     }
     this.layoutMap[index] = layout
-  },
-  renderActive: function() {
+  }
+
+  renderActive = () => {
     if (!this.state.active) return
     let index = this.state.active.rowData.index
     return this.renderRow(this.props.data[index], 's1', index, () => {}, {
       active: true,
       thumb: true,
     })
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     this.setOrder(this.props)
-  },
-  componentWillReceiveProps: function(props) {
+  }
+
+  componentWillReceiveProps(props) {
     this.setOrder(props)
-  },
-  setOrder: function(props) {
+  }
+
+  setOrder = props => {
     this.order = props.order || Object.keys(props.data) || []
-  },
-  getScrollResponder: function() {
+  }
+
+  getScrollResponder = () => {
     return this.scrollResponder
-  },
-  render: function() {
+  }
+
+  render() {
     let dataSource = this.state.ds.cloneWithRows(
       this.props.data,
       this.props.order,
@@ -456,10 +480,11 @@ var SortableListView = React.createClass({
         {this.renderActive()}
       </View>
     )
-  },
-  scrollTo: function(...args) {
-    this.scrollResponder.scrollTo.apply(this.scrollResponder, args)
-  },
-})
+  }
 
-module.exports = SortableListView
+  scrollTo = (...args) => {
+    this.scrollResponder.scrollTo(...args)
+  }
+}
+
+export default SortableListView

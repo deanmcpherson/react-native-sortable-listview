@@ -24,8 +24,8 @@ let data = {
 
 let order = Object.keys(data) //Array of keys
 
-let RowComponent = React.createClass({
-  render: function() {
+class RowComponent extends React.Component {
+  render() {
     return (
       <TouchableHighlight
         underlayColor={'#eee'}
@@ -40,11 +40,11 @@ let RowComponent = React.createClass({
         <Text>{this.props.data.text}</Text>
       </TouchableHighlight>
     )
-  },
-})
+  }
+}
 
-let MyComponent = React.createClass({
-  render: function() {
+class MyComponent extends React.Component {
+  render() {
     return (
       <SortableListView
         style={{ flex: 1 }}
@@ -57,7 +57,7 @@ let MyComponent = React.createClass({
         renderRow={row => <RowComponent data={row} />}
       />
     )
-  },
-})
+  }
+}
 
-module.exports = MyComponent
+export default MyComponent
