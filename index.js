@@ -1,11 +1,11 @@
 import React from 'react'
 import {
-  ListView,
-  LayoutAnimation,
   View,
   Animated,
+  ListView,
   Dimensions,
   PanResponder,
+  LayoutAnimation,
 } from 'react-native'
 
 let HEIGHT = Dimensions.get('window').height
@@ -221,7 +221,7 @@ class SortableListView extends React.Component {
           this.scrollContainerHeight - this.listLayout.height + itemHeight,
         )
         if (this.scrollValue > MAX_HEIGHT) {
-          this.scrollResponder.scrollTo({ y: MAX_HEIGHT })
+          this.scrollTo({ y: MAX_HEIGHT })
         }
 
         this.state.active = false
@@ -308,12 +308,7 @@ class SortableListView extends React.Component {
       }
       if (newScrollValue !== null) {
         this.scrollValue = newScrollValue
-        //this.scrollResponder.scrollWithoutAnimationTo(this.scrollValue, 0);
-        this.scrollResponder.scrollTo({
-          y: this.scrollValue,
-          x: 0,
-          animated: false,
-        })
+        this.scrollTo({ y: this.scrollValue })
       }
       this.checkTargetElement()
       requestAnimationFrame(this.scrollAnimation)
@@ -436,10 +431,6 @@ class SortableListView extends React.Component {
     this.order = props.order || Object.keys(props.data) || []
   }
 
-  getScrollResponder = () => {
-    return this.scrollResponder
-  }
-
   render() {
     let dataSource = this.state.ds.cloneWithRows(
       this.props.data,
@@ -450,9 +441,7 @@ class SortableListView extends React.Component {
       <View
         ref="wrapper"
         style={{ flex: 1 }}
-        onLayout={() => {
-          this.measureWrapper()
-        }}
+        onLayout={this.measureWrapper}
       >
         <ListView
           enableEmptySections={true}
@@ -479,7 +468,11 @@ class SortableListView extends React.Component {
   }
 
   scrollTo = (...args) => {
-    this.scrollResponder.scrollTo(...args)
+    this.refs.list.scrollTo(...args)
+  }
+
+  getScrollResponder = () => {
+    return this.refs.list.getScrollResponder()
   }
 }
 
