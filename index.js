@@ -261,11 +261,12 @@ class SortableListView extends React.Component {
   }
 
   scrollValue = 0
-  scrollContainerHeight = HEIGHT * 1.2 // Gets calculated on scroll, but if you havent scrolled needs an initial value
+  // Gets calculated on scroll, but if you havent scrolled needs an initial value
+  scrollContainerHeight = HEIGHT * 1.2
 
   scrollAnimation = () => {
     if (this.state.active) {
-      if (this.moveY == undefined) {
+      if (this.moveY === undefined) {
         return requestAnimationFrame(this.scrollAnimation)
       }
 
@@ -342,7 +343,7 @@ class SortableListView extends React.Component {
     }
     if (!isLast) i--
 
-    if (i != this.state.hovering && i >= 0) {
+    if (i !== this.state.hovering && i >= 0) {
       LayoutAnimation.easeInEaseOut()
       this._previouslyHovering = this.state.hovering
       this.__activeY = this.panY
@@ -398,7 +399,7 @@ class SortableListView extends React.Component {
         ref={view => {
           this._rowRefs[active ? 'ghost' : index] = view
         }}
-        hovering={hoveringIndex == index}
+        hovering={hoveringIndex === index}
         panResponder={this.state.panResponder}
         rowData={{ data, section, index }}
         onRowActive={this.handleRowActive}
