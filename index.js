@@ -8,7 +8,7 @@ import {
   LayoutAnimation,
 } from 'react-native'
 
-let HEIGHT = Dimensions.get('window').height
+const HEIGHT = Dimensions.get('window').height
 
 class Row extends React.Component {
   _data = {}
@@ -17,17 +17,18 @@ class Row extends React.Component {
     if (props.hovering !== this.props.hovering) return true
     if (props.active !== this.props.active) return true
     if (props.rowData.data !== this.props.rowData.data) return true
-    if (props.rowHasChanged)
+    if (props.rowHasChanged) {
       return props.rowHasChanged(props.rowData.data, this._data)
+    }
     return false
   }
 
   handleLongPress = e => {
     this.refs.view.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-        let layout = { frameX, frameY, frameWidth, frameHeight, pageX, pageY }
+        const layout = { frameX, frameY, frameWidth, frameHeight, pageX, pageY }
         this.props.onRowActive({
-          layout: layout,
+          layout,
           touch: e.nativeEvent,
           rowData: this.props.rowData,
         })
@@ -36,7 +37,7 @@ class Row extends React.Component {
   }
 
   componentDidUpdate(props) {
-    //Take a shallow copy of the active data. So we can do manual comparisons of rows if needed.
+    // Take a shallow copy of the active data. So we can do manual comparisons of rows if needed.
     if (props.rowHasChanged) {
       this._data = typeof props.rowData.data === 'object'
         ? Object.assign({}, props.rowData.data)
@@ -44,17 +45,15 @@ class Row extends React.Component {
     }
   }
 
-  measure = (...args) => {
-    return this.refs.view.measure(...args)
-  }
+  measure = (...args) => this.refs.view.measure(...args)
 
   render() {
-    let layout = this.props.list.layoutMap[this.props.rowData.index]
-    let activeData = this.props.list.state.active
+    const layout = this.props.list.layoutMap[this.props.rowData.index]
+    const activeData = this.props.list.state.active
 
-    let activeIndex = activeData ? activeData.rowData.index : -5
-    let shouldDisplayHovering = activeIndex !== this.props.rowData.index
-    let Row = React.cloneElement(
+    const activeIndex = activeData ? activeData.rowData.index : -5
+    const shouldDisplayHovering = activeIndex !== this.props.rowData.index
+    const Row = React.cloneElement(
       this.props.renderRow(
         this.props.rowData.data,
         this.props.rowData.section,
@@ -92,8 +91,8 @@ class Row extends React.Component {
 class SortRow extends React.Component {
   constructor(props) {
     super(props)
-    let layout = props.list.state.active.layout
-    let wrapperLayout = props.list.wrapperLayout
+    const layout = props.list.state.active.layout
+    const wrapperLayout = props.list.wrapperLayout
 
     this.state = {
       style: {
@@ -110,7 +109,7 @@ class SortRow extends React.Component {
   }
 
   render() {
-    let handlers = this.props.panResponder.panHandlers
+    const handlers = this.props.panResponder.panHandlers
     return (
       <Animated.View
         ref="view"
@@ -135,7 +134,7 @@ class SortRow extends React.Component {
 class SortableListView extends React.Component {
   constructor(props, context) {
     super(props, context)
-    let currentPanValue = { x: 0, y: 0 }
+    const currentPanValue = { x: 0, y: 0 }
 
     this.state = {
       ds: new ListView.DataSource({
@@ -149,7 +148,7 @@ class SortableListView extends React.Component {
       pan: new Animated.ValueXY(currentPanValue),
     }
     this.listener = this.state.pan.addListener(e => (this.panY = e.y))
-    let onPanResponderMoveCb = Animated.event([
+    const onPanResponderMoveCb = Animated.event([
       null,
       {
         dx: this.state.pan.x, // x,y are Animated.Value
@@ -160,9 +159,9 @@ class SortableListView extends React.Component {
     this.state.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: e => true,
       onMoveShouldSetPanResponderCapture: (e, a) => {
-        //Only capture when moving vertically, this helps for child swiper rows.
-        let vy = Math.abs(a.vy)
-        let vx = Math.abs(a.vx)
+        // Only capture when moving vertically, this helps for child swiper rows.
+        const vy = Math.abs(a.vy)
+        const vx = Math.abs(a.vx)
 
         return vy > vx && this.state.active
       },
@@ -186,18 +185,19 @@ class SortableListView extends React.Component {
           this.moveY = null
           return
         }
-        let itemHeight = this.state.active.layout.frameHeight
-        let fromIndex = this.order.indexOf(this.state.active.rowData.index)
+        const itemHeight = this.state.active.layout.frameHeight
+        const fromIndex = this.order.indexOf(this.state.active.rowData.index)
         let toIndex = this.state.hovering === false
           ? fromIndex
           : Number(this.state.hovering)
-        let up = toIndex > fromIndex
+        const up = toIndex > fromIndex
         if (up) {
           toIndex--
         }
-        if (toIndex === fromIndex)
+        if (toIndex === fromIndex) {
           return this.setState({ active: false, hovering: false })
-        let args = {
+        }
+        const args = {
           row: this.state.active.rowData,
           from: fromIndex,
           to: toIndex,
@@ -205,8 +205,8 @@ class SortableListView extends React.Component {
 
         props.onRowMoved && props.onRowMoved(args)
         if (props._legacySupport) {
-          //rely on parent data changes to set state changes
-          //LayoutAnimation.easeInEaseOut()
+          // rely on parent data changes to set state changes
+          // LayoutAnimation.easeInEaseOut()
           this.state.active = false
           this.state.hovering = false
         } else {
@@ -216,7 +216,7 @@ class SortableListView extends React.Component {
           })
         }
 
-        let MAX_HEIGHT = Math.max(
+        const MAX_HEIGHT = Math.max(
           0,
           this.scrollContainerHeight - this.listLayout.height + itemHeight,
         )
@@ -246,7 +246,14 @@ class SortableListView extends React.Component {
     if (this.refs.wrapper) {
       this.refs.wrapper.measure(
         (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-          let layout = { frameX, frameY, frameWidth, frameHeight, pageX, pageY }
+          const layout = {
+            frameX,
+            frameY,
+            frameWidth,
+            frameHeight,
+            pageX,
+            pageY,
+          }
           this.wrapperLayout = layout
         },
       )
@@ -254,27 +261,28 @@ class SortableListView extends React.Component {
   }
 
   scrollValue = 0
-  scrollContainerHeight = HEIGHT * 1.2 //Gets calculated on scroll, but if you havent scrolled needs an initial value
+  scrollContainerHeight = HEIGHT * 1.2 // Gets calculated on scroll, but if you havent scrolled needs an initial value
 
   scrollAnimation = () => {
     if (this.state.active) {
-      if (this.moveY == undefined)
+      if (this.moveY == undefined) {
         return requestAnimationFrame(this.scrollAnimation)
+      }
 
-      let SCROLL_OFFSET = this.wrapperLayout.pageY
-      let moveY = this.moveY - SCROLL_OFFSET
-      let SCROLL_LOWER_BOUND = 80
-      let SCROLL_HIGHER_BOUND = this.listLayout.height - SCROLL_LOWER_BOUND
-      let NORMAL_SCROLL_MAX =
+      const SCROLL_OFFSET = this.wrapperLayout.pageY
+      const moveY = this.moveY - SCROLL_OFFSET
+      const SCROLL_LOWER_BOUND = 80
+      const SCROLL_HIGHER_BOUND = this.listLayout.height - SCROLL_LOWER_BOUND
+      const NORMAL_SCROLL_MAX =
         this.scrollContainerHeight - this.listLayout.height
-      let MAX_SCROLL_VALUE =
+      const MAX_SCROLL_VALUE =
         NORMAL_SCROLL_MAX + this.state.active.layout.frameHeight * 2
-      let currentScrollValue = this.scrollValue
+      const currentScrollValue = this.scrollValue
       let newScrollValue = null
-      let SCROLL_MAX_CHANGE = 20
+      const SCROLL_MAX_CHANGE = 20
 
       if (moveY < SCROLL_LOWER_BOUND && currentScrollValue > 0) {
-        let PERCENTAGE_CHANGE = 1 - moveY / SCROLL_LOWER_BOUND
+        const PERCENTAGE_CHANGE = 1 - moveY / SCROLL_LOWER_BOUND
         newScrollValue =
           currentScrollValue - PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE
         if (newScrollValue < 0) newScrollValue = 0
@@ -283,7 +291,7 @@ class SortableListView extends React.Component {
         moveY > SCROLL_HIGHER_BOUND &&
         currentScrollValue < MAX_SCROLL_VALUE
       ) {
-        let PERCENTAGE_CHANGE =
+        const PERCENTAGE_CHANGE =
           1 - (this.listLayout.height - moveY) / SCROLL_LOWER_BOUND
         newScrollValue =
           currentScrollValue + PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE
@@ -294,11 +302,11 @@ class SortableListView extends React.Component {
         currentScrollValue > NORMAL_SCROLL_MAX &&
         NORMAL_SCROLL_MAX > 0
       ) {
-        let PERCENTAGE_CHANGE =
+        const PERCENTAGE_CHANGE =
           1 - (this.listLayout.height - moveY) / SCROLL_LOWER_BOUND
         pc = PERCENTAGE_CHANGE
 
-        //newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
+        // newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
       }
       if (newScrollValue !== null) {
         this.scrollValue = newScrollValue
@@ -310,20 +318,20 @@ class SortableListView extends React.Component {
   }
 
   checkTargetElement = () => {
-    let SLOP = 1.0 // assume rows will be > 1 pixel high
-    let scrollValue = this.scrollValue
+    const SLOP = 1.0 // assume rows will be > 1 pixel high
+    const scrollValue = this.scrollValue
 
-    let moveY = this.moveY - this.wrapperLayout.pageY
+    const moveY = this.moveY - this.wrapperLayout.pageY
 
-    let activeRowY = scrollValue + moveY - this.firstRowY
+    const activeRowY = scrollValue + moveY - this.firstRowY
 
     let indexHeight = 0.0
     let i = 0
     let row
-    let order = this.order
+    const order = this.order
     let isLast = false
     while (indexHeight < activeRowY + SLOP) {
-      let key = order[i]
+      const key = order[i]
       row = this.layoutMap[key]
       if (!row) {
         isLast = true
@@ -363,20 +371,23 @@ class SortableListView extends React.Component {
   }
 
   renderActiveDivider = () => {
-    let height = this.state.active ? this.state.active.layout.frameHeight : null
-    if (this.props.renderActiveDivider)
+    const height = this.state.active
+      ? this.state.active.layout.frameHeight
+      : null
+    if (this.props.renderActiveDivider) {
       return this.props.renderActiveDivider(height)
-    return <View style={{ height: height }} />
+    }
+    return <View style={{ height }} />
   }
 
   renderRow = (data, section, index, highlightfn, active) => {
-    let Component = active ? SortRow : Row
-    let isActiveRow =
+    const Component = active ? SortRow : Row
+    const isActiveRow =
       !active && this.state.active && this.state.active.rowData.index === index
     if (!active && isActiveRow) {
       active = { active: true }
     }
-    let hoveringIndex = this.order[this.state.hovering] || this.state.hovering
+    const hoveringIndex = this.order[this.state.hovering] || this.state.hovering
     return (
       <Component
         {...this.props}
@@ -406,7 +417,7 @@ class SortableListView extends React.Component {
 
   renderActive = () => {
     if (!this.state.active) return
-    let index = this.state.active.rowData.index
+    const index = this.state.active.rowData.index
     return this.renderRow(this.props.data[index], 's1', index, () => {}, {
       active: true,
       thumb: true,
@@ -426,19 +437,15 @@ class SortableListView extends React.Component {
   }
 
   render() {
-    let dataSource = this.state.ds.cloneWithRows(
+    const dataSource = this.state.ds.cloneWithRows(
       this.props.data,
       this.props.order,
     )
 
     return (
-      <View
-        ref="wrapper"
-        style={{ flex: 1 }}
-        onLayout={this.measureWrapper}
-      >
+      <View ref="wrapper" style={{ flex: 1 }} onLayout={this.measureWrapper}>
         <ListView
-          enableEmptySections={true}
+          enableEmptySections
           {...this.props}
           {...this.state.panResponder.panHandlers}
           ref="list"
@@ -465,9 +472,7 @@ class SortableListView extends React.Component {
     this.refs.list.scrollTo(...args)
   }
 
-  getScrollResponder = () => {
-    return this.refs.list.getScrollResponder()
-  }
+  getScrollResponder = () => this.refs.list.getScrollResponder()
 }
 
 export default SortableListView
