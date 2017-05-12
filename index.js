@@ -6,6 +6,7 @@ import {
   Dimensions,
   PanResponder,
   LayoutAnimation,
+  InteractionManager,
 } from 'react-native'
 
 const HEIGHT = Dimensions.get('window').height
@@ -243,21 +244,20 @@ class SortableListView extends React.Component {
   }
 
   measureWrapper = () => {
-    if (this.refs.wrapper) {
-      this.refs.wrapper.measure(
-        (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-          const layout = {
-            frameX,
-            frameY,
-            frameWidth,
-            frameHeight,
-            pageX,
-            pageY,
-          }
-          this.wrapperLayout = layout
-        },
-      )
-    }
+    this.refs.wrapper.measure(
+      (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
+        console.log(frameY, pageY)
+        const layout = {
+          frameX,
+          frameY,
+          frameWidth,
+          frameHeight,
+          pageX,
+          pageY,
+        }
+        this.wrapperLayout = layout
+      },
+    )
   }
 
   scrollValue = 0
@@ -425,6 +425,10 @@ class SortableListView extends React.Component {
     })
   }
 
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(this.measureWrapper)
+  }
+
   componentWillMount() {
     this.setOrder(this.props)
   }
@@ -444,7 +448,7 @@ class SortableListView extends React.Component {
     )
 
     return (
-      <View ref="wrapper" style={{ flex: 1 }} onLayout={this.measureWrapper}>
+      <View ref="wrapper" style={{ flex: 1 }}>
         <ListView
           enableEmptySections
           {...this.props}
