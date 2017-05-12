@@ -1,5 +1,4 @@
 import React from 'react'
-// import TimerMixin from 'react-timer-mixin'
 import {
   ListView,
   LayoutAnimation,
@@ -264,12 +263,9 @@ class SortableListView extends React.Component {
   scrollContainerHeight = HEIGHT * 1.2 //Gets calculated on scroll, but if you havent scrolled needs an initial value
 
   scrollAnimation = () => {
-    if (
-      // this.isMounted() /* deprecated and unnecessary: using TimerMixin */ &&
-      this.state.active
-    ) {
+    if (this.state.active) {
       if (this.moveY == undefined)
-        return this.requestAnimationFrame(this.scrollAnimation)
+        return requestAnimationFrame(this.scrollAnimation)
 
       let SCROLL_OFFSET = this.wrapperLayout.pageY
       let moveY = this.moveY - SCROLL_OFFSET
@@ -320,7 +316,7 @@ class SortableListView extends React.Component {
         })
       }
       this.checkTargetElement()
-      this.requestAnimationFrame(this.scrollAnimation)
+      requestAnimationFrame(this.scrollAnimation)
     }
   }
 
