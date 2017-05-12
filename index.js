@@ -49,7 +49,6 @@ class Row extends React.Component {
   measure = (...args) => this.refs.view.measure(...args)
 
   render() {
-    const layout = this.props.list.layoutMap[this.props.rowData.index]
     const activeData = this.props.list.state.active
 
     const activeIndex = activeData ? activeData.rowData.index : -5
@@ -110,7 +109,6 @@ class SortRow extends React.Component {
   }
 
   render() {
-    const handlers = this.props.panResponder.panHandlers
     return (
       <Animated.View
         ref="view"
@@ -158,27 +156,27 @@ class SortableListView extends React.Component {
     ])
 
     this.state.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: e => true,
-      onMoveShouldSetPanResponderCapture: (e, a) => {
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponderCapture: (e, gestureState) => {
         // Only capture when moving vertically, this helps for child swiper rows.
-        const vy = Math.abs(a.vy)
-        const vx = Math.abs(a.vx)
+        const vy = Math.abs(gestureState.vy)
+        const vx = Math.abs(gestureState.vx)
 
         return vy > vx && this.state.active
       },
-      onPanResponderMove: (evt, gestureState) => {
+      onPanResponderMove: (e, gestureState) => {
         gestureState.dx = 0
         this.moveY = gestureState.moveY
-        onPanResponderMoveCb(evt, gestureState)
+        onPanResponderMoveCb(e, gestureState)
       },
 
-      onPanResponderGrant: (e, gestureState) => {
+      onPanResponderGrant: () => {
         this.moved = true
         props.onMoveStart && props.onMoveStart()
         this.state.pan.setOffset(currentPanValue)
         this.state.pan.setValue(currentPanValue)
       },
-      onPanResponderRelease: e => {
+      onPanResponderRelease: () => {
         this.moved = false
         props.onMoveEnd && props.onMoveEnd()
         if (!this.state.active) {
@@ -298,17 +296,6 @@ class SortableListView extends React.Component {
           currentScrollValue + PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE
         if (newScrollValue > MAX_SCROLL_VALUE) newScrollValue = MAX_SCROLL_VALUE
       }
-      if (
-        moveY < SCROLL_HIGHER_BOUND &&
-        currentScrollValue > NORMAL_SCROLL_MAX &&
-        NORMAL_SCROLL_MAX > 0
-      ) {
-        const PERCENTAGE_CHANGE =
-          1 - (this.listLayout.height - moveY) / SCROLL_LOWER_BOUND
-        pc = PERCENTAGE_CHANGE
-
-        // newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
-      }
       if (newScrollValue !== null) {
         this.scrollValue = newScrollValue
         this.scrollTo({ y: this.scrollValue })
@@ -385,16 +372,14 @@ class SortableListView extends React.Component {
     const Component = active ? SortRow : Row
     const isActiveRow =
       !active && this.state.active && this.state.active.rowData.index === index
-    if (!active && isActiveRow) {
-      active = { active: true }
-    }
+
     const hoveringIndex = this.order[this.state.hovering] || this.state.hovering
     return (
       <Component
         {...this.props}
         activeDivider={this.renderActiveDivider()}
         key={index}
-        active={active}
+        active={active || isActiveRow}
         list={this}
         ref={view => {
           this._rowRefs[active ? 'ghost' : index] = view
