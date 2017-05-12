@@ -343,7 +343,7 @@ class SortableListView extends React.Component {
     }
     if (!isLast) i--
 
-    if (i !== this.state.hovering && i >= 0) {
+    if (String(i) !== this.state.hovering && i >= 0) {
       LayoutAnimation.easeInEaseOut()
       this._previouslyHovering = this.state.hovering
       this.__activeY = this.panY
