@@ -65,7 +65,7 @@ var SortRow = React.createClass({
         position: 'absolute',
         left: 0,
         right: 0,
-        opacity: .2,
+        opacity: this.props.activeOpacity || .2,
         height: layout.frameHeight,
         overflow: 'hidden',
         backgroundColor: 'transparent',
