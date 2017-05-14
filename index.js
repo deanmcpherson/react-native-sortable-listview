@@ -242,6 +242,7 @@ class SortableListView extends React.Component {
   }
 
   measureWrapper = () => {
+    if (!this.refs.wrapper) return
     this.refs.wrapper.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
         const layout = {
