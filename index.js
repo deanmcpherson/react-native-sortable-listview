@@ -33,7 +33,7 @@ class Row extends React.Component {
           touch: e.nativeEvent,
           rowData: this.props.rowData,
         })
-      },
+      }
     )
   }
 
@@ -59,7 +59,7 @@ class Row extends React.Component {
         this.props.rowData.section,
         this.props.rowData.index,
         null,
-        this.props.active,
+        this.props.active
       ),
       {
         sortHandlers: {
@@ -68,7 +68,7 @@ class Row extends React.Component {
         },
         onLongPress: this.handleLongPress,
         onPressOut: this.props.list.cancel,
-      },
+      }
     )
     return (
       <View
@@ -103,7 +103,7 @@ class SortRow extends React.Component {
         height: layout.frameHeight,
         overflow: 'hidden',
         backgroundColor: 'transparent',
-        marginTop: layout.pageY - wrapperLayout.pageY, //Account for top bar spacing
+        marginTop: layout.pageY - wrapperLayout.pageY, // Account for top bar spacing
       },
     }
   }
@@ -123,7 +123,7 @@ class SortRow extends React.Component {
           this.props.rowData.section,
           this.props.rowData.index,
           null,
-          true,
+          true
         )}
       </Animated.View>
     )
@@ -217,7 +217,7 @@ class SortableListView extends React.Component {
 
         const MAX_HEIGHT = Math.max(
           0,
-          this.scrollContainerHeight - this.listLayout.height + itemHeight,
+          this.scrollContainerHeight - this.listLayout.height + itemHeight
         )
         if (this.scrollValue > MAX_HEIGHT) {
           this.scrollTo({ y: MAX_HEIGHT })
@@ -254,7 +254,7 @@ class SortableListView extends React.Component {
           pageY,
         }
         this.wrapperLayout = layout
-      },
+      }
     )
   }
 
@@ -354,7 +354,7 @@ class SortableListView extends React.Component {
         active: row,
         hovering: row.rowData.index,
       },
-      this.scrollAnimation,
+      this.scrollAnimation
     )
   }
 
@@ -429,7 +429,7 @@ class SortableListView extends React.Component {
   render() {
     const dataSource = this.state.ds.cloneWithRows(
       this.props.data,
-      this.props.order,
+      this.props.order
     )
 
     return (
