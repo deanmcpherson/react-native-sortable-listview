@@ -11,7 +11,10 @@ import {
 const HEIGHT = Dimensions.get('window').height
 
 class Row extends React.Component {
-  _data = {}
+  constructor(props) {
+    super(props)
+    this._data = {}
+  }
 
   shouldComponentUpdate(props) {
     if (props.hovering !== this.props.hovering) return true
@@ -45,7 +48,9 @@ class Row extends React.Component {
     }
   }
 
-  measure = (...args) => this.refs.view.measure(...args)
+  measure = (...args) => {
+    this.refs.view.measure(...args)
+  }
 
   render() {
     const activeData = this.props.list.state.active
@@ -132,6 +137,7 @@ class SortRow extends React.Component {
 class SortableListView extends React.Component {
   constructor(props, context) {
     super(props, context)
+
     const currentPanValue = { x: 0, y: 0 }
 
     this.state = {
@@ -228,7 +234,13 @@ class SortableListView extends React.Component {
       },
     })
 
-    this.state = this.state
+    this.scrollValue = 0
+    // Gets calculated on scroll, but if you havent scrolled needs an initial value
+    this.scrollContainerHeight = HEIGHT * 1.2
+
+    this.firstRowY = undefined
+    this.layoutMap = {}
+    this._rowRefs = {}
   }
 
   cancel = () => {
@@ -240,7 +252,7 @@ class SortableListView extends React.Component {
     }
   }
 
-  measureWrapper = e => {
+  handleWrapperLayout = e => {
     const layout = e.nativeEvent.layout
     this.wrapperLayout = {
       frameHeight: layout.height,
@@ -248,9 +260,18 @@ class SortableListView extends React.Component {
     }
   }
 
-  scrollValue = 0
-  // Gets calculated on scroll, but if you havent scrolled needs an initial value
-  scrollContainerHeight = HEIGHT * 1.2
+  handleListLayout = e => {
+    this.listLayout = e.nativeEvent.layout
+  }
+
+  handleScroll = e => {
+    this.scrollValue = e.nativeEvent.contentOffset.y
+    if (this.props.onScroll) this.props.onScroll(e)
+  }
+
+  handleContentSizeChange = (width, height) => {
+    this.scrollContainerHeight = height
+  }
 
   scrollAnimation = () => {
     if (this.state.active) {
@@ -329,10 +350,6 @@ class SortableListView extends React.Component {
       })
     }
   }
-
-  firstRowY = undefined
-  layoutMap = {}
-  _rowRefs = {}
 
   handleRowActive = row => {
     if (this.props.disableSorting) return
@@ -417,26 +434,21 @@ class SortableListView extends React.Component {
       this.props.data,
       this.props.order
     )
+    const scrollEnabled =
+      !this.state.active && this.props.scrollEnabled !== false
 
     return (
-      <View style={{ flex: 1 }} onLayout={this.measureWrapper}>
+      <View style={{ flex: 1 }} onLayout={this.handleWrapperLayout}>
         <ListView
           enableEmptySections
           {...this.props}
           {...this.state.panResponder.panHandlers}
           ref="list"
           dataSource={dataSource}
-          onScroll={e => {
-            this.scrollValue = e.nativeEvent.contentOffset.y
-            if (this.props.onScroll) this.props.onScroll(e)
-          }}
-          onContentSizeChange={(width, height) => {
-            this.scrollContainerHeight = height
-          }}
-          onLayout={e => (this.listLayout = e.nativeEvent.layout)}
-          scrollEnabled={
-            !this.state.active && this.props.scrollEnabled !== false
-          }
+          onScroll={this.handleScroll}
+          onContentSizeChange={this.handleContentSizeChange}
+          onLayout={this.handleListLayout}
+          scrollEnabled={scrollEnabled}
           renderRow={this.renderRow}
         />
         {this.renderActive()}
@@ -448,7 +460,9 @@ class SortableListView extends React.Component {
     this.refs.list.scrollTo(...args)
   }
 
-  getScrollResponder = () => this.refs.list.getScrollResponder()
+  getScrollResponder = () => {
+    this.refs.list.getScrollResponder()
+  }
 }
 
 module.exports = SortableListView
