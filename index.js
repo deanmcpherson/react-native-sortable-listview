@@ -6,7 +6,6 @@ import {
   Dimensions,
   PanResponder,
   LayoutAnimation,
-  InteractionManager,
 } from 'react-native'
 
 const HEIGHT = Dimensions.get('window').height
@@ -27,7 +26,7 @@ class Row extends React.Component {
   handleLongPress = e => {
     this.refs.view.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-        const layout = { frameX, frameY, frameWidth, frameHeight, pageX, pageY }
+        const layout = { frameHeight, pageY }
         this.props.onRowActive({
           layout,
           touch: e.nativeEvent,
@@ -241,21 +240,12 @@ class SortableListView extends React.Component {
     }
   }
 
-  measureWrapper = () => {
-    if (!this.refs.wrapper) return
-    this.refs.wrapper.measure(
-      (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-        const layout = {
-          frameX,
-          frameY,
-          frameWidth,
-          frameHeight,
-          pageX,
-          pageY,
-        }
-        this.wrapperLayout = layout
-      }
-    )
+  measureWrapper = e => {
+    const layout = e.nativeEvent.layout
+    this.wrapperLayout = {
+      frameHeight: layout.height,
+      pageY: layout.y,
+    }
   }
 
   scrollValue = 0
@@ -410,10 +400,6 @@ class SortableListView extends React.Component {
     })
   }
 
-  componentDidMount() {
-    InteractionManager.runAfterInteractions(this.measureWrapper)
-  }
-
   componentWillMount() {
     this.setOrder(this.props)
   }
@@ -433,7 +419,7 @@ class SortableListView extends React.Component {
     )
 
     return (
-      <View ref="wrapper" style={{ flex: 1 }}>
+      <View style={{ flex: 1 }} onLayout={this.measureWrapper}>
         <ListView
           enableEmptySections
           {...this.props}
@@ -465,4 +451,4 @@ class SortableListView extends React.Component {
   getScrollResponder = () => this.refs.list.getScrollResponder()
 }
 
-export default SortableListView
+module.exports = SortableListView
