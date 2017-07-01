@@ -4,7 +4,7 @@ Drag drop capable wrapper of ListView for React Native. Allows for dragging and 
 ## Add it to your project
 
 1. Run `npm install react-native-sortable-listview --save`
-2. `var SortableListView = require('react-native-sortable-listview');`
+2. `import SortableListView from 'react-native-sortable-listview'`
 
 ## Demo
 
@@ -12,74 +12,7 @@ Drag drop capable wrapper of ListView for React Native. Allows for dragging and 
 
 ## Basic usage
 
-```javascript
-
-let SortableListView = require('react-native-sortable-listview');
-let React = require('react-native');
-let {
-  View,
-  Text,
-  TouchableHighlight
-} = React;
-
-
-let data = {
-  hello: {text: 'world'},
-  how: {text: 'are you'},
-  test: {text: 123},
-  this: {text: 'is'},
-  a: {text: 'a'},
-  real: {text: 'real'},
-  drag: {text: 'drag and drop'},
-  bb: {text: 'bb'},
-  cc: {text: 'cc'},
-  dd: {text: 'dd'},
-  ee: {text: 'ee'},
-  ff: {text: 'ff'},
-  gg: {text: 'gg'},
-  hh: {text: 'hh'},
-  ii: {text: 'ii'},
-  jj: {text: 'jj'},
-  kk: {text: 'kk'}
-}
-
-let order = Object.keys(data); //Array of keys
-
-let RowComponent = React.createClass({
-  render: function() {
-    return (
-      <TouchableHighlight
-        underlayColor={'#eee'}
-        delayLongPress={500} {/* 500ms hold delay */}
-        style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}}
-        {...this.props.sortHandlers}
-      >
-        <Text>{this.props.data.text}</Text>
-      </TouchableHighlight>
-    );
-  }
-})
-
-let MyComponent = React.createClass({
-  render: function() {
-    return <SortableListView
-          style={{flex: 1}}
-          data={data}
-          order={order}
-          onRowMoved={e => {
-            order.splice(e.to, 0, order.splice(e.from, 1)[0]);
-            this.forceUpdate();
-          }}
-          onMoveStart={ () => console.log('on move start') }
-          onMoveEnd={ () => console.log('on move end') }
-          renderRow={row => <RowComponent data={row} />}
-        />
-  }
-});
-
-module.exports = MyComponent;
-
-```
+See [example](example.js).
 
 ## Example
 
