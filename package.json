@@ -4,8 +4,11 @@
   "description": "Drag drop capable wrapper of ListView for React Native",
   "main": "index.js",
   "scripts": {
-    "prettier": "prettier --write --single-quote --no-semi --trailing-comma es5 --print-width 80 \"*.js\"",
+    "prettier": "prettier --write $npm_package_config_prettier \"*.js\"",
     "test": "jest"
+  },
+  "config": {
+    "prettier": "--single-quote --no-semi --trailing-comma es5 --print-width 80"
   },
   "repository": {
     "type": "git",
