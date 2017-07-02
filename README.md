@@ -38,7 +38,14 @@ SortableListView passes through all the standard ListView properties to ListView
 
 ---
 
-### Contributions welcome!
+### Contributing
+
+Before submitting a PR, please:
+
+1. Format your code by running `npm run prettier`.
+2. Test by running `npm run test`. (Currently this produces 2 warnings, no errors).
+3. Build the [Sortable](Sortable) example app and test fully for regressions on both iOS and android.
+4. Describe your change in the `Unreleased` section of the [Changelog](CHANGELOG.md).
 
 ---
 
