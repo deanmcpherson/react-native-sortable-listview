@@ -16,4 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Other minor refactoring.
 
 
-## [0.2.2] - 2017-03-10 - Last release before Changelog added
+## [0.2.2] - 2017-03-10
+
+- Last release before Changelog added
