@@ -31,7 +31,7 @@ SortableListView passes through all the standard ListView properties to ListView
  - **`disableSorting`** _(boolean) (optional) - When set to true, all sorting will be disabled, which will effectively make the SortableListView act like a normal ListView.
  - **`onMoveStart`** _(Function)_ (Optional) - Register a handler to be called when drag start.
  - **`onMoveEnd`** _(Function)_ (Optional) - Register a handler to be called when move is completed.
-
+ - **`activeOpacity`** _(Number)_ (Optional) - Sets opacity of an active element. Default value: `0.2`.
 ## methods
 
 - **`scrollTo(...args)`** - Scrolls to a given x, y offset, either immediately or with a smooth animation. See ScrollView's scrollTo method.
