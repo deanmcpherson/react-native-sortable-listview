@@ -4,7 +4,7 @@ Drag drop capable wrapper of ListView for React Native. Allows for dragging and 
 ## Add it to your project
 
 1. Run `npm install react-native-sortable-listview --save`
-2. `var SortableListView = require('react-native-sortable-listview');`
+2. `import SortableListView from 'react-native-sortable-listview'`
 
 ## Demo
 
@@ -12,74 +12,7 @@ Drag drop capable wrapper of ListView for React Native. Allows for dragging and 
 
 ## Basic usage
 
-```javascript
-
-let SortableListView = require('react-native-sortable-listview');
-let React = require('react-native');
-let {
-  View,
-  Text,
-  TouchableHighlight
-} = React;
-
-
-let data = {
-  hello: {text: 'world'},
-  how: {text: 'are you'},
-  test: {text: 123},
-  this: {text: 'is'},
-  a: {text: 'a'},
-  real: {text: 'real'},
-  drag: {text: 'drag and drop'},
-  bb: {text: 'bb'},
-  cc: {text: 'cc'},
-  dd: {text: 'dd'},
-  ee: {text: 'ee'},
-  ff: {text: 'ff'},
-  gg: {text: 'gg'},
-  hh: {text: 'hh'},
-  ii: {text: 'ii'},
-  jj: {text: 'jj'},
-  kk: {text: 'kk'}
-}
-
-let order = Object.keys(data); //Array of keys
-
-let RowComponent = React.createClass({
-  render: function() {
-    return (
-      <TouchableHighlight
-        underlayColor={'#eee'}
-        delayLongPress={500} {/* 500ms hold delay */}
-        style={{padding: 25, backgroundColor: "#F8F8F8", borderBottomWidth:1, borderColor: '#eee'}}
-        {...this.props.sortHandlers}
-      >
-        <Text>{this.props.data.text}</Text>
-      </TouchableHighlight>
-    );
-  }
-})
-
-let MyComponent = React.createClass({
-  render: function() {
-    return <SortableListView
-          style={{flex: 1}}
-          data={data}
-          order={order}
-          onRowMoved={e => {
-            order.splice(e.to, 0, order.splice(e.from, 1)[0]);
-            this.forceUpdate();
-          }}
-          onMoveStart={ () => console.log('on move start') }
-          onMoveEnd={ () => console.log('on move end') }
-          renderRow={row => <RowComponent data={row} />}
-        />
-  }
-});
-
-module.exports = MyComponent;
-
-```
+See [example](example.js).
 
 ## Example
 
@@ -98,14 +31,21 @@ SortableListView passes through all the standard ListView properties to ListView
  - **`disableSorting`** _(boolean) (optional) - When set to true, all sorting will be disabled, which will effectively make the SortableListView act like a normal ListView.
  - **`onMoveStart`** _(Function)_ (Optional) - Register a handler to be called when drag start.
  - **`onMoveEnd`** _(Function)_ (Optional) - Register a handler to be called when move is completed.
-
+ - **`activeOpacity`** _(Number)_ (Optional) - Sets opacity of an active element. Default value: `0.2`.
 ## methods
 
 - **`scrollTo(...args)`** - Scrolls to a given x, y offset, either immediately or with a smooth animation. See ScrollView's scrollTo method.
 
 ---
 
-### Contributions welcome!
+### Contributing
+
+Before submitting a PR, please:
+
+1. Format your code by running `npm run prettier`.
+2. Test by running `npm run test`. (Currently this produces 2 warnings, no errors).
+3. Build the [Sortable](Sortable) example app and test fully for regressions on both iOS and android.
+4. Describe your change in the `Unreleased` section of the [Changelog](CHANGELOG.md).
 
 ---
 
