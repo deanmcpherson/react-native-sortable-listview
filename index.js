@@ -372,8 +372,46 @@ class SortableListView extends React.Component {
     if (this.props.renderActiveDivider) {
       return this.props.renderActiveDivider(height)
     }
-    return <View style={{ height }} />
-  }
+    let hoveringIndex = this.order[this.state.hovering];
+    return (<Component
+      {...this.props}
+      activeDivider={this.renderActiveDivider()}
+      key={index}
+      active={active}
+      list={this}
+      ref={view => { this._rowRefs[active ? 'ghost' : index] = view; }}
+      hovering={hoveringIndex == index}
+      panResponder={this.state.panResponder}
+      rowData={{data, section, index}}
+      onRowActive={this.handleRowActive}
+      onRowLayout={layout => this._updateLayoutMap(index, layout.nativeEvent.layout)}
+      />);
+  },
+  _updateLayoutMap(index, layout) {
+      if (this.firstRowY === undefined || layout.y < this.firstRowY) {
+          this.firstRowY = layout.y;
+      }
+      this.layoutMap[index] = layout;
+  },
+  renderActive: function() {
+    if (!this.state.active) return;
+    let index = this.state.active.rowData.index;
+    return this.renderRow(this.props.data[index], 's1', index, () => {}, {active: true, thumb: true});
+  },
+  componentWillMount: function() {
+    this.setOrder(this.props);
+  },
+  componentWillReceiveProps: function(props) {
+    this.setOrder(props);
+  },
+  setOrder: function(props) {
+    this.order = props.order || Object.keys(props.data) || [];
+  },
+  getScrollResponder: function() {
+    return this.scrollResponder;
+  },
+  render: function() {
+    let dataSource = this.state.ds.cloneWithRows(this.props.data, this.props.order);
 
   renderRow = (data, section, index, highlightfn, active) => {
     const Component = active ? SortRow : Row
