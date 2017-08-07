@@ -160,6 +160,10 @@ class SortableListView extends React.Component {
       },
     ])
 
+    this.moved = false
+    this.moveY = null
+    this.dy = 0
+    this.direction = 'down'
     this.state.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: (e, gestureState) => {
@@ -171,12 +175,17 @@ class SortableListView extends React.Component {
       },
       onPanResponderMove: (e, gestureState) => {
         gestureState.dx = 0
-        this.moveY = gestureState.moveY
+        const layout = this.state.active.layout
+        this.moveY = layout.pageY + layout.frameHeight / 2 + gestureState.dy
+        this.direction = gestureState.dy >= this.dy ? 'down' : 'up'
+        this.dy = gestureState.dy
         onPanResponderMoveCb(e, gestureState)
       },
 
       onPanResponderGrant: () => {
         this.moved = true
+        this.dy = 0
+        this.direction = 'down'
         props.onMoveStart && props.onMoveStart()
         this.state.pan.setOffset(currentPanValue)
         this.state.pan.setValue(currentPanValue)
@@ -317,7 +326,8 @@ class SortableListView extends React.Component {
   }
 
   checkTargetElement = () => {
-    const SLOP = 1.0 // assume rows will be > 1 pixel high
+    const itemHeight = this.state.active.layout.frameHeight
+    const SLOP = this.direction === 'down' ? itemHeight : 0
     const scrollValue = this.scrollValue
 
     const moveY = this.moveY - this.wrapperLayout.pageY
@@ -355,7 +365,7 @@ class SortableListView extends React.Component {
     if (this.props.disableSorting) return
     this.state.pan.setValue({ x: 0, y: 0 })
     LayoutAnimation.easeInEaseOut()
-    this.moveY = row.layout.pageY
+    this.moveY = row.layout.pageY + row.layout.frameHeight / 2
     this.setState(
       {
         active: row,
