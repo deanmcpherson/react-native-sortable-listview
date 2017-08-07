@@ -425,6 +425,10 @@ class SortableListView extends React.Component {
     this.setOrder(props)
   }
 
+  componentWillUnmount() {
+    this.state.pan.removeListener(this.listener)
+  }
+
   setOrder = props => {
     this.order = props.order || Object.keys(props.data) || []
   }
