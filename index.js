@@ -245,6 +245,7 @@ class SortableListView extends React.Component {
 
   cancel = () => {
     if (!this.moved) {
+      this.state.active && this.props.onMoveCancel && this.props.onMoveCancel()
       this.setState({
         active: false,
         hovering: false,
@@ -363,6 +364,7 @@ class SortableListView extends React.Component {
       },
       this.scrollAnimation
     )
+    this.props.onRowActive && this.props.onRowActive(row)
   }
 
   renderActiveDivider = () => {
@@ -395,13 +397,13 @@ class SortableListView extends React.Component {
         panResponder={this.state.panResponder}
         rowData={{ data, section, index }}
         onRowActive={this.handleRowActive}
-        onRowLayout={layout =>
-          this._updateLayoutMap(index, layout.nativeEvent.layout)}
+        onRowLayout={this._updateLayoutMap(index)}
       />
     )
   }
 
-  _updateLayoutMap = (index, layout) => {
+  _updateLayoutMap = index => e => {
+    const layout = e.nativeEvent.layout
     if (this.firstRowY === undefined || layout.y < this.firstRowY) {
       this.firstRowY = layout.y
     }
