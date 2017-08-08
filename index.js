@@ -170,18 +170,21 @@ class SortableListView extends React.Component {
         return vy > vx && this.state.active
       },
       onPanResponderMove: (e, gestureState) => {
+        if (!this.state.active) return
         gestureState.dx = 0
         this.moveY = gestureState.moveY
         onPanResponderMoveCb(e, gestureState)
       },
 
       onPanResponderGrant: () => {
+        if (!this.state.active) return
         this.moved = true
         props.onMoveStart && props.onMoveStart()
         this.state.pan.setOffset(currentPanValue)
         this.state.pan.setValue(currentPanValue)
       },
       onPanResponderRelease: () => {
+        if (!this.state.active) return
         this.moved = false
         props.onMoveEnd && props.onMoveEnd()
         if (!this.state.active) {
