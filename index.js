@@ -320,7 +320,7 @@ class SortableListView extends React.Component {
           currentScrollValue + PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE
         if (newScrollValue > MAX_SCROLL_VALUE) newScrollValue = MAX_SCROLL_VALUE
       }
-      if (newScrollValue !== null) {
+      if (newScrollValue !== null && !this.props.limitScrolling) {
         this.scrollValue = newScrollValue
         this.scrollTo({ y: this.scrollValue })
       }
