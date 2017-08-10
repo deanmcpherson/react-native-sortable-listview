@@ -160,6 +160,10 @@ class SortableListView extends React.Component {
       },
     ])
 
+    this.moved = false
+    this.moveY = null
+    this.dy = 0
+    this.direction = 'down'
     this.state.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: (e, gestureState) => {
@@ -170,18 +174,26 @@ class SortableListView extends React.Component {
         return vy > vx && this.state.active
       },
       onPanResponderMove: (e, gestureState) => {
+        if (!this.state.active) return
         gestureState.dx = 0
-        this.moveY = gestureState.moveY
+        const layout = this.state.active.layout
+        this.moveY = layout.pageY + layout.frameHeight / 2 + gestureState.dy
+        this.direction = gestureState.dy >= this.dy ? 'down' : 'up'
+        this.dy = gestureState.dy
         onPanResponderMoveCb(e, gestureState)
       },
 
       onPanResponderGrant: () => {
+        if (!this.state.active) return
         this.moved = true
+        this.dy = 0
+        this.direction = 'down'
         props.onMoveStart && props.onMoveStart()
         this.state.pan.setOffset(currentPanValue)
         this.state.pan.setValue(currentPanValue)
       },
       onPanResponderRelease: () => {
+        if (!this.state.active) return
         this.moved = false
         props.onMoveEnd && props.onMoveEnd()
         if (!this.state.active) {
@@ -245,6 +257,7 @@ class SortableListView extends React.Component {
 
   cancel = () => {
     if (!this.moved) {
+      this.state.active && this.props.onMoveCancel && this.props.onMoveCancel()
       this.setState({
         active: false,
         hovering: false,
@@ -312,13 +325,14 @@ class SortableListView extends React.Component {
         // this.scrollValue = newScrollValue
         // this.scrollTo({ y: this.scrollValue })
       }
-      this.checkTargetElement()
+      this.moved && this.checkTargetElement()
       requestAnimationFrame(this.scrollAnimation)
     }
   }
 
   checkTargetElement = () => {
-    const SLOP = 1.0 // assume rows will be > 1 pixel high
+    const itemHeight = this.state.active.layout.frameHeight
+    const SLOP = this.direction === 'down' ? itemHeight : 0
     const scrollValue = this.scrollValue
 
     const moveY = this.moveY - this.wrapperLayout.pageY
@@ -356,7 +370,7 @@ class SortableListView extends React.Component {
     if (this.props.disableSorting) return
     this.state.pan.setValue({ x: 0, y: 0 })
     LayoutAnimation.easeInEaseOut()
-    this.moveY = row.layout.pageY
+    this.moveY = row.layout.pageY + row.layout.frameHeight / 2
     this.setState(
       {
         active: row,
@@ -364,6 +378,7 @@ class SortableListView extends React.Component {
       },
       this.scrollAnimation
     )
+    this.props.onRowActive && this.props.onRowActive(row)
   }
 
   renderActiveDivider = () => {
@@ -396,13 +411,13 @@ class SortableListView extends React.Component {
         panResponder={this.state.panResponder}
         rowData={{ data, section, index }}
         onRowActive={this.handleRowActive}
-        onRowLayout={layout =>
-          this._updateLayoutMap(index, layout.nativeEvent.layout)}
+        onRowLayout={this._updateLayoutMap(index)}
       />
     )
   }
 
-  _updateLayoutMap = (index, layout) => {
+  _updateLayoutMap = index => e => {
+    const layout = e.nativeEvent.layout
     if (this.firstRowY === undefined || layout.y < this.firstRowY) {
       this.firstRowY = layout.y
     }
@@ -424,6 +439,10 @@ class SortableListView extends React.Component {
 
   componentWillReceiveProps(props) {
     this.setOrder(props)
+  }
+
+  componentWillUnmount() {
+    this.state.pan.removeListener(this.listener)
   }
 
   setOrder = props => {

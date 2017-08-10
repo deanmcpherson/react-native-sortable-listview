@@ -31,6 +31,8 @@ SortableListView passes through all the standard ListView properties to ListView
  - **`disableSorting`** _(boolean) (optional) - When set to true, all sorting will be disabled, which will effectively make the SortableListView act like a normal ListView.
  - **`onMoveStart`** _(Function)_ (Optional) - Register a handler to be called when drag start.
  - **`onMoveEnd`** _(Function)_ (Optional) - Register a handler to be called when move is completed.
+ - **`onRowActive`** _(Function)_ (Optional) - Register a handler to be called when row is activated, return a object contains three properties `rowData`, `touch` and `layout`. `rowData` is the data info of activated row, `layout` is the layout info of the activated row, `touch` is the `nativeEvent` of long press
+ - **`onMoveCancel`** _(Function)_ (Optional) - Register a handler to be called when move is canceled, that is the row is activated on long press and then released without any move.
  - **`activeOpacity`** _(Number)_ (Optional) - Sets opacity of an active element. Default value: `0.2`.
 ## methods
 
