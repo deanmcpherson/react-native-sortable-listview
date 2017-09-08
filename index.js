@@ -78,7 +78,7 @@ class Row extends React.Component {
       <View
         onLayout={this.props.onRowLayout}
         style={[
-          this.props.active && !this.props.hovering ? { height: 0.01 } : null,
+          this.props.active && !this.props.hovering ? { height: 0.01, opacity: 0.0 } : null,
           this.props.active && this.props.hovering ? { opacity: 0.0 } : null,
         ]}
         ref="view"
