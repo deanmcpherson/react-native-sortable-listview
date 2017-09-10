@@ -2,7 +2,6 @@
 
 exports[`renders correctly 1`] = `
 <View
-  onLayout={[Function]}
   style={
     Object {
       "flex": 1,
