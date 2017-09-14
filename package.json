@@ -1,6 +1,6 @@
 {
   "name": "react-native-sortable-listview",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Drag drop capable wrapper of ListView for React Native",
   "main": "index.js",
   "scripts": {
