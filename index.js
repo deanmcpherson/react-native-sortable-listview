@@ -446,7 +446,9 @@ class SortableListView extends React.Component {
   }
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(this.measureWrapper)
+    InteractionManager.runAfterInteractions(() => {
+      setTimeout(this.measureWrapper, 0)
+    })
   }
 
   componentWillReceiveProps(props) {
@@ -470,7 +472,7 @@ class SortableListView extends React.Component {
       !this.state.active && this.props.scrollEnabled !== false
 
     return (
-      <View ref="wrapper" style={{ flex: 1 }}>
+      <View ref="wrapper" style={{ flex: 1 }} collapsable={false}>
         <ListView
           enableEmptySections
           {...this.props}
