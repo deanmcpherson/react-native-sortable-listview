@@ -79,7 +79,9 @@ class Row extends React.Component {
       <View
         onLayout={this.props.onRowLayout}
         style={[
-          this.props.active && !this.props.hovering ? { height: 0.01, opacity: 0.0 } : null,
+          this.props.active && !this.props.hovering
+            ? { height: 0.01, opacity: 0.0 }
+            : null,
           this.props.active && this.props.hovering ? { opacity: 0.0 } : null,
         ]}
         ref="view"
@@ -267,6 +269,7 @@ class SortableListView extends React.Component {
   }
 
   measureWrapper = () => {
+    if (!this.refs.wrapper) return
     this.refs.wrapper.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
         const layout = {
@@ -447,7 +450,7 @@ class SortableListView extends React.Component {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      setTimeout(this.measureWrapper, 0)
+      this.timer = setTimeout(this.measureWrapper, 0)
     })
   }
 
@@ -456,6 +459,7 @@ class SortableListView extends React.Component {
   }
 
   componentWillUnmount() {
+    this.timer && clearTimeout(this.timer)
     this.state.pan.removeListener(this.listener)
   }
 
