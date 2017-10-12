@@ -475,9 +475,11 @@ class SortableListView extends React.Component {
     const scrollEnabled =
       !this.state.active && this.props.scrollEnabled !== false
 
+    const ListViewComponent = this.props.ListViewComponent || ListView
+
     return (
       <View ref="wrapper" style={{ flex: 1 }} collapsable={false}>
-        <ListView
+        <ListViewComponent
           enableEmptySections
           {...this.props}
           {...this.state.panResponder.panHandlers}

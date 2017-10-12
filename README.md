@@ -35,6 +35,7 @@ SortableListView passes through all the standard ListView properties to ListView
  - **`onMoveCancel`** _(Function)_ (Optional) - Register a handler to be called when move is canceled, that is the row is activated on long press and then released without any move.
  - **`activeOpacity`** _(Number)_ (Optional) - Sets opacity of an active element. Default value: `0.2`.
  - **`limitScrolling`** _(boolean) (optional) - When set to true, scrolling will be disabled when a row is active (sorting). Default is `false`.
+ - **`ListViewComponent`** _(Function) (optional) - A custom ListView component to be used instead of React-Native's ListView
 
 ## methods
 
