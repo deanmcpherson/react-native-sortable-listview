@@ -334,7 +334,7 @@ class SortableListView extends React.Component {
       }
       if (newScrollValue !== null && !this.props.limitScrolling) {
         this.scrollValue = newScrollValue
-        this.scrollTo({ y: this.scrollValue })
+        this.scrollTo({ y: this.scrollValue, animated: !this.props.disableAnimatedScrolling })
       }
       this.moved && this.checkTargetElement()
       requestAnimationFrame(this.scrollAnimation)
