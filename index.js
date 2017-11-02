@@ -450,7 +450,7 @@ class SortableListView extends React.Component {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.timer = setTimeout(() => this && this.measureWrapper, 0)
+      this.timer = setTimeout(() => this && this.measureWrapper(), 0)
     })
   }
 
