@@ -27,7 +27,7 @@ class Row extends React.Component {
     return false
   }
 
-  handleLongPress = e => {
+  handlePress = e => {
     this.refs.view.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
         const layout = { frameHeight, pageY }
@@ -68,10 +68,12 @@ class Row extends React.Component {
       ),
       {
         sortHandlers: {
-          onLongPress: this.handleLongPress,
+          onLongPress: !this.props.moveOnPressIn ? this.handlePress : null,
+          onPressIn: this.props.moveOnPressIn? this.handlePress : null,
           onPressOut: this.props.list.cancel,
         },
-        onLongPress: this.handleLongPress,
+        onLongPress: !this.props.moveOnPressIn ? this.handleLongPress : null,
+        onPressIn: this.props.moveOnPressIn? this.handlePress : null,
         onPressOut: this.props.list.cancel,
       }
     )
