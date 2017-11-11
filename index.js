@@ -43,9 +43,10 @@ class Row extends React.Component {
   componentDidUpdate(props) {
     // Take a shallow copy of the active data. So we can do manual comparisons of rows if needed.
     if (props.rowHasChanged) {
-      this._data = typeof props.rowData.data === 'object'
-        ? Object.assign({}, props.rowData.data)
-        : props.rowData.data
+      this._data =
+        typeof props.rowData.data === 'object'
+          ? Object.assign({}, props.rowData.data)
+          : props.rowData.data
     }
   }
 
@@ -69,11 +70,11 @@ class Row extends React.Component {
       {
         sortHandlers: {
           onLongPress: !this.props.moveOnPressIn ? this.handlePress : null,
-          onPressIn: this.props.moveOnPressIn? this.handlePress : null,
+          onPressIn: this.props.moveOnPressIn ? this.handlePress : null,
           onPressOut: this.props.list.cancel,
         },
         onLongPress: !this.props.moveOnPressIn ? this.handleLongPress : null,
-        onPressIn: this.props.moveOnPressIn? this.handlePress : null,
+        onPressIn: this.props.moveOnPressIn ? this.handlePress : null,
         onPressOut: this.props.list.cancel,
       }
     )
@@ -208,9 +209,10 @@ class SortableListView extends React.Component {
         }
         const itemHeight = this.state.active.layout.frameHeight
         const fromIndex = this.order.indexOf(this.state.active.rowData.index)
-        let toIndex = this.state.hovering === false
-          ? fromIndex
-          : Number(this.state.hovering)
+        let toIndex =
+          this.state.hovering === false
+            ? fromIndex
+            : Number(this.state.hovering)
         const up = toIndex > fromIndex
         if (up) {
           toIndex--
