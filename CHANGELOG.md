@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Prop to moveOnPressIn. LongPress delay is eliminated if moveOnPressIn is true.
 - Prop to ListViewComponent. A custom ListView component to be used instead of React-Native's ListView.
+- Prop to disableAnimatedScrolling. Disable animation when scrolling.
 
 ## [0.2.6] - 2017-09-14
 ### Fixed
