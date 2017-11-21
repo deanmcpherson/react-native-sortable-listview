@@ -28,6 +28,7 @@ class Row extends React.Component {
   }
 
   handlePress = e => {
+    if (!this.refs.view) return
     this.refs.view.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
         const layout = { frameHeight, pageY }
@@ -51,6 +52,7 @@ class Row extends React.Component {
   }
 
   measure = (...args) => {
+    if (!this.refs.view) return
     this.refs.view.measure(...args)
   }
 
@@ -501,10 +503,12 @@ class SortableListView extends React.Component {
   }
 
   scrollTo = (...args) => {
+    if (!this.refs.list) return;
     this.refs.list.scrollTo(...args)
   }
 
   getScrollResponder = () => {
+    if (!this.refs.list) return;
     this.refs.list.getScrollResponder()
   }
 }
