@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [Unreleased]
+### Added
+- Prop to moveOnPressIn. LongPress delay is eliminated if moveOnPressIn is true.
+- Prop to ListViewComponent. A custom ListView component to be used instead of React-Native's ListView.
+
 ## [0.2.6] - 2017-09-14
 ### Fixed
 - Issue #101
