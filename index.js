@@ -301,8 +301,15 @@ class SortableListView extends React.Component {
   }
 
   handleContentSizeChange = (width, height) => {
-    this.scrollContainerHeight = height
-  }
+    this.scrollContainerHeight = height;
+
+    // NOTE: Need to recalcuate the scrollView height when items are drag-and-hold beyond the 
+    // length of the list and back into it. Without this checkTargetElement uses the old 
+    // cache verison the height of the scrollView creating a gap.
+    if (this.scrollValue > 0) {
+      this.scrollTo({ y: height, animated: !this.props.disableAnimatedScrolling });
+    }
+  };
 
   scrollAnimation = () => {
     if (this.state.active) {
