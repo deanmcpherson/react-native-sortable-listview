@@ -75,7 +75,7 @@ class Row extends React.Component {
           onPressIn: this.props.moveOnPressIn ? this.handlePress : null,
           onPressOut: this.props.list.cancel,
         },
-        onLongPress: !this.props.moveOnPressIn ? this.handleLongPress : null,
+        onLongPress: !this.props.moveOnPressIn ? this.handlePress : null,
         onPressIn: this.props.moveOnPressIn ? this.handlePress : null,
         onPressOut: this.props.list.cancel,
       }
