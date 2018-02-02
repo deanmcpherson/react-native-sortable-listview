@@ -375,8 +375,6 @@ class SortableListView extends React.Component {
 
     if (String(i) !== this.state.hovering && i >= 0) {
       LayoutAnimation.easeInEaseOut()
-      this._previouslyHovering = this.state.hovering
-      this.__activeY = this.panY
       this.setState({
         hovering: String(i),
       })
@@ -413,7 +411,7 @@ class SortableListView extends React.Component {
     const isActiveRow =
       !active && this.state.active && this.state.active.rowData.index === index
 
-    const hoveringIndex = this.order[this.state.hovering] || this.state.hovering
+    const hoveringIndex = this.order[this.state.hovering]
     return (
       <Component
         {...this.props}
