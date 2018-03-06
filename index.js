@@ -29,6 +29,7 @@ class Row extends React.Component {
   }
 
   handlePress = e => {
+    e.persist(); // suppresses an RN warning on Row press
     if (!this.refs.view) return
     this.refs.view.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
