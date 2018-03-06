@@ -5,6 +5,7 @@ import {
   ListView,
   Dimensions,
   PanResponder,
+  Platform,
   LayoutAnimation,
   InteractionManager,
 } from 'react-native'
@@ -378,8 +379,10 @@ class SortableListView extends React.Component {
     if (!isLast) i--
 
     if (String(i) !== this.state.hovering && i >= 0) {
-      // TODO: Fix for Android and Windows
-      // LayoutAnimation.easeInEaseOut()
+      if (Platform.OS === 'ios') {
+        // TODO: Fix for Android and Windows https://github.com/facebook/react-native/issues/13207
+        // LayoutAnimation.easeInEaseOut()
+      }
       this._previouslyHovering = this.state.hovering
       this.__activeY = this.panY
       this.setState({
@@ -391,8 +394,10 @@ class SortableListView extends React.Component {
   handleRowActive = row => {
     if (this.props.disableSorting) return
     this.state.pan.setValue({ x: 0, y: 0 })
-    // TODO: Fix for Android and Windows
-    // LayoutAnimation.easeInEaseOut()
+    if (Platform.OS === 'ios') {
+      // TODO: Fix for Android and Windows https://github.com/facebook/react-native/issues/13207
+      // LayoutAnimation.easeInEaseOut()
+    }
     this.moveY = row.layout.pageY + row.layout.frameHeight / 2
     this.setState(
       {
