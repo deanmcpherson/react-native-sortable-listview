@@ -188,7 +188,12 @@ class SortableListView extends React.Component {
         this.moveY = layout.pageY + layout.frameHeight / 2 + gestureState.dy
         this.direction = gestureState.dy >= this.dy ? 'down' : 'up'
         this.dy = gestureState.dy
-        onPanResponderMoveCb(e, gestureState)
+        var { height, width } = Dimensions.get('window');
+        const adjustedListHeight = height - this.listLayout.height;
+        if (gestureState.moveY > adjustedListHeight)
+        {
+          onPanResponderMoveCb(e, gestureState)
+        }
       },
 
       onPanResponderGrant: () => {
