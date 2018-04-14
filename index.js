@@ -231,7 +231,7 @@ class SortableListView extends React.Component {
         props.onRowMoved && props.onRowMoved(args)
         if (props._legacySupport) {
           // rely on parent data changes to set state changes
-          // LayoutAnimation && LayoutAnimation.easeInEaseOut()
+          // LayoutAnimation && LayoutAnimation.easeInEaseOut(); // LayoutAnimation is not supported in react-native-web
           this.state.active = false
           this.state.hovering = false
         } else {
@@ -374,7 +374,7 @@ class SortableListView extends React.Component {
     if (!isLast) i--
 
     if (String(i) !== this.state.hovering && i >= 0) {
-      LayoutAnimation && LayoutAnimation.easeInEaseOut()
+      LayoutAnimation && LayoutAnimation.easeInEaseOut(); // LayoutAnimation is not supported in react-native-web
       this._previouslyHovering = this.state.hovering
       this.__activeY = this.panY
       this.setState({
@@ -386,7 +386,7 @@ class SortableListView extends React.Component {
   handleRowActive = row => {
     if (this.props.disableSorting) return
     this.state.pan.setValue({ x: 0, y: 0 })
-    LayoutAnimation && LayoutAnimation.easeInEaseOut()
+    LayoutAnimation && LayoutAnimation.easeInEaseOut(); // LayoutAnimation is not supported in react-native-web
     this.moveY = row.layout.pageY + row.layout.frameHeight / 2
     this.setState(
       {
