@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.2.9] - 2018-04-14
 ### Added
-- Adopting for web, by neutralizing LayoutAnimation (#145)
+- Adapting for web, by neutralizing LayoutAnimation (#145)
 
 ## [0.2.8] - 2018-02-01
 ### Fixed
