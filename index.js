@@ -200,6 +200,7 @@ class SortableListView extends React.Component {
         this.state.pan.setValue(currentPanValue)
       },
       onPanResponderRelease: () => {
+        props.onResponderRelease && props.onResponderRelease()
         if (!this.state.active) return
         this.moved = false
         props.onMoveEnd && props.onMoveEnd()
