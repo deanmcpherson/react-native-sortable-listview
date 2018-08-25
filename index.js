@@ -178,9 +178,10 @@ class SortableListView extends React.Component {
         const vy = Math.abs(gestureState.vy)
         const vx = Math.abs(gestureState.vx)
 
-        return vy > vx && this.state.active
+        return vy > vx && vy > 0.02
       },
       onPanResponderMove: (e, gestureState) => {
+        props.androidOnScroll && props.androidOnScroll(e, gestureState)
         if (!this.state.active) return
         gestureState.dx = 0
         const layout = this.state.active.layout
