@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Adapting for web, by neutralizing LayoutAnimation (#145)
+- Prop to stickyRows. Sets immovable rows by passing an array of keys.
 
 ## [0.2.8] - 2018-02-01
 ### Fixed

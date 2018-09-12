@@ -372,6 +372,11 @@ class SortableListView extends React.Component {
       indexHeight += row.height
       i++
     }
+
+    if (this.props.stickyRows && this.props.stickyRows.includes(order[i-1])) {
+      return;
+    }
+
     if (!isLast) i--
 
     if (String(i) !== this.state.hovering && i >= 0) {
