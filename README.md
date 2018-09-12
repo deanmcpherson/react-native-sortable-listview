@@ -38,7 +38,7 @@ SortableListView passes through all the standard ListView properties to ListView
  - **`moveOnPressIn`** _(boolean) (optional) - When set to true, longPress delay is eliminated. Default is `false`.
  - **`ListViewComponent`** _(Function) (optional) - A custom ListView component to be used instead of React-Native's ListView.
  - **`disableAnimatedScrolling`** _(boolean) (optional) - When set to true, scrolling will no longer animate. Default is `false`. **Strongly recommend set it to `true`.**, see #97 for more context.
- - **`stickyRows`** _(Array) (optional) - Sets immovable rows by passing number elements in array.
+ - **`stickyRows`** _(Array) (optional) - Sets immovable rows by passing an array of keys.
 
 
 ## methods

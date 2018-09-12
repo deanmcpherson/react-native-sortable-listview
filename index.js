@@ -373,7 +373,7 @@ class SortableListView extends React.Component {
       i++
     }
 
-    if (this.props.stickyRows && this.props.stickyRows.includes(i-1)) {
+    if (this.props.stickyRows && this.props.stickyRows.includes(order[i-1])) {
       return;
     }
 
