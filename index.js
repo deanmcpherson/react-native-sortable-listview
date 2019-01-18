@@ -46,10 +46,9 @@ class Row extends React.Component {
   componentDidUpdate(props) {
     // Take a shallow copy of the active data. So we can do manual comparisons of rows if needed.
     if (props.rowHasChanged) {
-      this._data =
-        typeof props.rowData.data === 'object'
-          ? Object.assign({}, props.rowData.data)
-          : props.rowData.data
+      this._data = typeof props.rowData.data === 'object'
+        ? Object.assign({}, props.rowData.data)
+        : props.rowData.data
     }
   }
 
@@ -217,10 +216,9 @@ class SortableListView extends React.Component {
         }
         const itemHeight = this.state.active.layout.frameHeight
         const fromIndex = this.order.indexOf(this.state.active.rowData.index)
-        let toIndex =
-          this.state.hovering === false
-            ? fromIndex
-            : Number(this.state.hovering)
+        let toIndex = this.state.hovering === false
+          ? fromIndex
+          : Number(this.state.hovering)
         const up = toIndex > fromIndex
         if (up) {
           toIndex--
@@ -237,7 +235,7 @@ class SortableListView extends React.Component {
         props.onRowMoved && props.onRowMoved(args)
         if (props._legacySupport) {
           // rely on parent data changes to set state changes
-          // LayoutAnimation.easeInEaseOut()
+          // LayoutAnimation && LayoutAnimation.easeInEaseOut()
           this.state.active = false
           this.state.hovering = false
         } else {
@@ -346,7 +344,10 @@ class SortableListView extends React.Component {
       }
       if (newScrollValue !== null && !this.props.limitScrolling) {
         this.scrollValue = newScrollValue
-        this.scrollTo({ y: this.scrollValue, animated: !this.props.disableAnimatedScrolling })
+        this.scrollTo({
+          y: this.scrollValue,
+          animated: !this.props.disableAnimatedScrolling,
+        })
       }
       this.moved && this.checkTargetElement()
       requestAnimationFrame(this.scrollAnimation)
@@ -382,7 +383,8 @@ class SortableListView extends React.Component {
     if (String(i) !== this.state.hovering && i >= 0) {
       if (Platform.OS === 'ios') {
         // TODO: Fix for Android and Windows https://github.com/facebook/react-native/issues/13207
-        LayoutAnimation.easeInEaseOut()
+        // LayoutAnimation is not supported in react-native-web
+        LayoutAnimation && LayoutAnimation.easeInEaseOut()
       }
       this._previouslyHovering = this.state.hovering
       this.__activeY = this.panY
@@ -397,7 +399,8 @@ class SortableListView extends React.Component {
     this.state.pan.setValue({ x: 0, y: 0 })
     if (Platform.OS === 'ios') {
       // TODO: Fix for Android and Windows https://github.com/facebook/react-native/issues/13207
-      LayoutAnimation.easeInEaseOut()
+      // LayoutAnimation is not supported in react-native-web
+      LayoutAnimation && LayoutAnimation.easeInEaseOut()
     }
     this.moveY = row.layout.pageY + row.layout.frameHeight / 2
     this.setState(
@@ -515,12 +518,12 @@ class SortableListView extends React.Component {
   }
 
   scrollTo = (...args) => {
-    if (!this.refs.list) return;
+    if (!this.refs.list) return
     this.refs.list.scrollTo(...args)
   }
 
   getScrollResponder = () => {
-    if (!this.refs.list) return;
+    if (!this.refs.list) return
     this.refs.list.getScrollResponder()
   }
 }
