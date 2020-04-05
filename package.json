@@ -1,5 +1,5 @@
 {
-  "name": "react-native-sortable-listview",
+  "name": "react-native-sortable-listview-newer",
   "version": "0.2.9",
   "description": "Drag drop capable wrapper of ListView for React Native",
   "main": "index.js",
@@ -12,10 +12,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deanmcpherson/react-native-sortable-listview.git"
+    "url": "git+https://github.com/crazycodeboy/react-native-sortable-listview.git"
   },
   "dependencies": {
-    "deprecated-react-native-listview": "^0.0.5"
+    "deprecated-react-native-listview": "^0.0.6"
   },
   "keywords": [
     "react-component",
@@ -29,12 +29,12 @@
     "list",
     "sort"
   ],
-  "author": "Dean McPherson",
+  "author": "CrazyCodeBoy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/deanmcpherson/react-native-sortable-listview/issues"
+    "url": "https://github.com/crazycodeboy/react-native-sortable-listview/issues"
   },
-  "homepage": "https://github.com/deanmcpherson/react-native-sortable-listview#readme",
+  "homepage": "https://github.com/crazycodeboy/react-native-sortable-listview#readme",
   "devDependencies": {
     "babel-jest": "^20.0.3",
     "babel-preset-es2015": "^6.22.0",
