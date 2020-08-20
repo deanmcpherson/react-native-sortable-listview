@@ -1,3 +1,6 @@
+# Deprecated
+This library has no active maintainer and many open issues. It is not recommended for new projects. Consider using [react-native-sortable-list](https://github.com/gitim/react-native-sortable-list) instead.
+
 # react-native-sortable-listview
 Drag drop capable wrapper of ListView for React Native. Allows for dragging and dropping of rows with automatic scrolling while dragging.
 
