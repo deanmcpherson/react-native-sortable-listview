@@ -178,9 +178,10 @@ class SortableListView extends React.Component {
         const vy = Math.abs(gestureState.vy)
         const vx = Math.abs(gestureState.vx)
 
-        return vy > vx && this.state.active
+        return vy > vx && vy > 0.04
       },
       onPanResponderMove: (e, gestureState) => {
+        props.androidOnScroll && props.androidOnScroll(e, gestureState)
         if (!this.state.active) return
         gestureState.dx = 0
         const layout = this.state.active.layout
@@ -200,6 +201,7 @@ class SortableListView extends React.Component {
         this.state.pan.setValue(currentPanValue)
       },
       onPanResponderRelease: () => {
+        props.onResponderRelease && props.onResponderRelease()
         if (!this.state.active) return
         this.moved = false
         props.onMoveEnd && props.onMoveEnd()

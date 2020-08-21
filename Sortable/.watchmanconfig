@@ -1,6 +1,0 @@
-{
-  "ignore_dirs": [
-    ".git",
-    "node_modules/react-native-sortable-listview/Sortable",
-  ]
-}
