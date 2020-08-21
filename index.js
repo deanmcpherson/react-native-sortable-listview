@@ -312,10 +312,8 @@ class SortableListView extends React.Component {
       const moveY = this.moveY - SCROLL_OFFSET
       const SCROLL_LOWER_BOUND = 80
       const SCROLL_HIGHER_BOUND = this.listLayout.height - SCROLL_LOWER_BOUND
-      const NORMAL_SCROLL_MAX =
-        this.scrollContainerHeight - this.listLayout.height
       const MAX_SCROLL_VALUE =
-        NORMAL_SCROLL_MAX + this.state.active.layout.frameHeight * 2
+        this.scrollContainerHeight - this.listLayout.height
       const currentScrollValue = this.scrollValue
       let newScrollValue = null
       const SCROLL_MAX_CHANGE = 20
