@@ -5,6 +5,7 @@ let {
   Text,
   TouchableHighlight,
   View,
+  UIManager,
 } = require('react-native');
 
 
@@ -88,9 +89,10 @@ let RowComponent = React.createClass({
 
 let MyComponent = React.createClass({
   render: function() {
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     return (
       <View style={styles.container}>
-         <View style={{height: 64, backgroundColor: 'lightblue'} /* fake nav bar */} >
+         <View style={{height: 89, backgroundColor: 'lightblue'} /* fake nav bar */} >
            <Text style={styles.welcome} > Sortable </Text>
          </View>
       <SortableListView

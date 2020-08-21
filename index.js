@@ -4,6 +4,7 @@ import {
   Animated,
   Dimensions,
   PanResponder,
+  Platform,
   LayoutAnimation,
   InteractionManager,
 } from 'react-native'
@@ -28,6 +29,7 @@ class Row extends React.Component {
   }
 
   handlePress = e => {
+    e.persist(); // suppresses an RN warning on Row press
     if (!this.refs.view) return
     this.refs.view.measure(
       (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
@@ -187,7 +189,11 @@ class SortableListView extends React.Component {
         this.moveY = layout.pageY + layout.frameHeight / 2 + gestureState.dy
         this.direction = gestureState.dy >= this.dy ? 'down' : 'up'
         this.dy = gestureState.dy
-        onPanResponderMoveCb(e, gestureState)
+        const adjustedListHeight = HEIGHT - this.listLayout.height;
+        if (gestureState.moveY > adjustedListHeight)
+        {
+          onPanResponderMoveCb(e, gestureState)
+        }
       },
 
       onPanResponderGrant: () => {
@@ -375,8 +381,11 @@ class SortableListView extends React.Component {
     if (!isLast) i--
 
     if (String(i) !== this.state.hovering && i >= 0) {
-      // LayoutAnimation is not supported in react-native-web
-      LayoutAnimation && LayoutAnimation.easeInEaseOut()
+      if (Platform.OS === 'ios') {
+        // TODO: Fix for Android and Windows https://github.com/facebook/react-native/issues/13207
+        // LayoutAnimation is not supported in react-native-web
+        LayoutAnimation && LayoutAnimation.easeInEaseOut()
+      }
       this._previouslyHovering = this.state.hovering
       this.__activeY = this.panY
       this.setState({
@@ -388,8 +397,11 @@ class SortableListView extends React.Component {
   handleRowActive = row => {
     if (this.props.disableSorting) return
     this.state.pan.setValue({ x: 0, y: 0 })
-    // LayoutAnimation is not supported in react-native-web
-    LayoutAnimation && LayoutAnimation.easeInEaseOut()
+    if (Platform.OS === 'ios') {
+      // TODO: Fix for Android and Windows https://github.com/facebook/react-native/issues/13207
+      // LayoutAnimation is not supported in react-native-web
+      LayoutAnimation && LayoutAnimation.easeInEaseOut()
+    }
     this.moveY = row.layout.pageY + row.layout.frameHeight / 2
     this.setState(
       {
